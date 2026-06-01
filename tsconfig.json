@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ES2022", // Modern JavaScriptre (ECMAScript 2022) célzol. A kódodban bátran használhatsz új nyelvi elemeket, a rendszer feltételezi, hogy a futtató környezet (modern böngésző) érteni fogja.
+    "useDefineForClassFields": true, // Az osztályok tulajdonságait (class fields) a legújabb, hivatalos ECMAScript szabvány szerint kezeli. Modern keretrendszereknél (pl. Vite + Vue/React) ez gyakran kötelező.
+    "module": "ESNext", // A legújabb modulrendszert használod (a megszokott import és export szintaxissal).
+    "lib": ["ES2022", "DOM", "DOM.Iterable"], // A legújabb JavaScript és böngésző API-kat használhatod. Ez biztosítja, hogy a modern szintaxis és API-k elérhetőek legyenek a fejlesztés során.
+    "types": ["vite/client"], // A Vite által biztosított típusdefiníciókat használod, ami segít a fejlesztés során a típusellenőrzésben és az autokompletálásban.
+    "skipLibCheck": true, // Gyorsabb fordítás érdekében kihagyja a könyvtárak típusdefinícióinak ellenőrzését. Ez gyakran hasznos, ha sok külső könyvtárat használsz, és nem akarsz minden egyes könyvtár típusát ellenőrizni.
+
+    /* Bundler mode */
+    "moduleResolution": "bundler", // A modulok feloldásának módja, amely a modern bundler-ek (pl. Vite) által használt szabályokat követi. Ez lehetővé teszi a modulok helyes feloldását a projektben.
+    "allowImportingTsExtensions": true, // Lehetővé teszi a TypeScript fájlok közvetlen importálását kiterjesztéssel (pl. import { something } from './file.ts'), ami hasznos lehet a Vite-vel való integráció során.
+    "verbatimModuleSyntax": true, // A modul szintaxisának megőrzése a fordítás során, ami segít a modern JavaScript modulok helyes működésében a Vite-vel.
+    "moduleDetection": "force", // Kényszeríti a modulok detektálását, ami biztosítja, hogy minden fájl modulnak legyen tekintve, így elkerülve a nem kívánt globális szkriptek létrehozását.
+    "noEmit": true, // Nem generál kimeneti JavaScript fájlokat, mivel a Vite fogja kezelni a fordítást és a bundlingot. Ez gyorsabb fejlesztési ciklust tesz lehetővé, mivel nem kell külön lépésben futtatni a TypeScript fordítót.
+
+    /* Linting */
+    "strict": true, // A legszigorúbb típusellenőrzést használod, ami segít elkerülni a típusokkal kapcsolatos hibákat és javítja a kód minőségét.
+    "noUnusedLocals": true, // Nem engedi meg a nem használt helyi változókat, ami segít tisztán tartani a kódot és elkerülni a felesleges változókat.
+    "noUnusedParameters": true, // Nem engedi meg a nem használt paramétereket, ami segít tisztán tartani a függvényeket és elkerülni a felesleges paramétereket.
+    "erasableSyntaxOnly": true, // Csak a szintaktikai elemeket engedi meg, amelyek törölhetők anélkül, hogy a kód működését befolyásolnák. Ez segít elkerülni a felesleges vagy nem használt kódot.
+    "noFallthroughCasesInSwitch": true, // Nem engedi meg a switch-case szerkezetben a "fallthrough" eseteket, ahol egy case után nincs break, ami véletlenül hibás működéshez vezethet.
+    "noUncheckedSideEffectImports": true // Nem engedi meg a nem ellenőrzött mellékhatásokat importáló fájlokat, ami segít elkerülni a nem kívánt mellékhatásokat a projektben.
+  },
+  "include": ["src"] // Csak a src könyvtárban lévő fájlokat veszi figyelembe a fordítás során, ami segít gyorsítani a fordítást és elkerülni a nem kívánt fájlok bevonását.
+}
