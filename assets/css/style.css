@@ -1,1 +1,45 @@
-@import 'bootstrap';
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #451804;
+    color: #e77d11;
+    font-family: 'New Mars';
+    background-image: url(../bg.avif);
+    background-position: center;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+canvas {
+    border: 5px ridge #c1440e;
+    background: #000;
+}
+
+h1 {
+    margin-block-start: 20px;
+    margin-block-end: 20px;
+}
+
+#assets {
+    display: none;
+}
+
+#ui {
+    position: absolute;
+    top: 20px;
+    text-align: center;
+    pointer-events: none;
+}
+
+font-family: 'New Mars', sans-serif;
+
+/*
+#f0e7e7
+#451804
+#c1440e
+#e77d11
+#fda600
+*/
