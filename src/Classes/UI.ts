@@ -1,6 +1,5 @@
-import { hide } from "@popperjs/core";
-import type { HEXColor } from "../Types/Color";
-import type { Game } from "./Game";
+import type { HEXColor } from "../Types/Color.ts";
+import type { Game } from "./Game.ts";
 
 export class UI{
     private Repo: Game;
