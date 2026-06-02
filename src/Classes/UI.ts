@@ -11,7 +11,7 @@ export class UI{
         this.Repo = repo;
         this.Width = this.Repo.OneFourthWidth;
         this.ResourceHeight = this.Repo.OneTwelfthHeight;
-        this.TerraHeight = this.Repo.OneSixthHeight;
+        this.TerraHeight = this.Repo.OneSixthHeight
     }
 
     draw(){

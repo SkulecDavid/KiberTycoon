@@ -34,10 +34,10 @@ export class Game{
     private StatBtn: Button;
     private BackBtn: Button;
 
-    private Ui: UI = new UI(this);
-    private Bg: BG = new BG(this, 'mars-img');
+    private Ui: UI;
+    private Bg: BG;
+    private MenuBg: Menu;
     public CurrentMenu: MenuType = 'main';
-    private MenuBg: Menu = new Menu(this);
 
     constructor(canvas: HTMLCanvasElement){
         this.Canvas = canvas;
@@ -61,6 +61,9 @@ export class Game{
         this.BackBtn = new Button(this, this.MainBtnColor, 'Vissza', this.BtnPositionX, this.BtnPositionY, ()=>{this.CurrentMenu = 'main'});
 
         this.clickInput();
+        this.Ui = new UI(this);
+        this.Bg = new BG(this, 'mars-img');
+        this.MenuBg = new Menu(this);
     }
 
     update(){
