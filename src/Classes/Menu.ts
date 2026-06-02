@@ -5,8 +5,13 @@ export class Menu{
     private Width: number;
     private Height: number;
 
-    constructor(repo: Game,){
+    constructor(repo: Game){
         this.Repo = repo;
+        this.Width = 0;
+        this.Height = 0;
+    }
+
+    update(){
         switch (this.Repo.CurrentMenu) {
             case 'mine':
                 this.Width = this.Repo.OneFourthWidth;
@@ -14,7 +19,7 @@ export class Menu{
                 break
             case 'market':
                 this.Width = this.Repo.OneTwelfthHeight*4;
-                this.Height = this.Repo.OneTwentyfourthHeight*7;
+                this.Height = this.Repo.OneTwentyfourthHeight*8;
                 break
             case 'tech':
                 this.Width = this.Repo.OneFourthWidth;
@@ -32,14 +37,45 @@ export class Menu{
     }
 
     draw(){
-        const ctx = this.Repo.Ctx;
-        ctx.fillStyle = this.Repo.LightColor;
-        ctx.lineWidth = 5;
-        ctx.strokeStyle = this.Repo.DarkColor;
-        ctx.textAlign = "left";
-
         if (this.Repo.CurrentMenu != 'main') {
+            const ctx = this.Repo.Ctx;
+            ctx.fillStyle = this.Repo.LightColor;
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = this.Repo.DarkColor;
+            ctx.textAlign = "left";
             ctx.fillRect(0, 0, this.Repo.CanvasWidth, this.Repo.CanvasHeight);
+
+            switch (this.Repo.CurrentMenu) {
+                case 'mine':
+                for (let i = 1; i < 4; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(this.Width*i, this.Height);
+                    ctx.lineTo(this.Width*i, 0);
+                    ctx.stroke();
+                }
+                break
+            case 'market':
+                for (let i = 0; i < 4; i++) {
+                    ctx.strokeRect(this.Repo.OneFourthWidth*i+this.Repo.OneTwentyfourthHeight*1.33, this.Repo.OneSixthHeight+this.Repo.OneTwentyfourthHeight, this.Width, this.Height);
+                }
+                for (let i = 0; i < 4; i++) {
+                    ctx.strokeRect(this.Repo.OneFourthWidth*i+this.Repo.OneTwentyfourthHeight*1.33, this.Repo.OneSixthHeight+this.Repo.OneTwentyfourthHeight+this.Height, this.Width, this.Height);
+                }
+                break
+            case 'tech':
+                for (let i = 1; i < 4; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(this.Width*i, this.Height);
+                    ctx.lineTo(this.Width*i, 0);
+                    ctx.stroke();
+                }
+                break
+            case 'stat':
+                for (let i = 0; i < 4; i++) {
+                    ctx.strokeRect(this.Repo.OneFourthWidth*i+this.Repo.OneTwentyfourthHeight*1.33, this.Repo.OneSixthHeight+this.Repo.OneTwentyfourthHeight, this.Width, this.Height);
+                }
+                break
+            }
         }
     }
 }

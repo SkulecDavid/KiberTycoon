@@ -3,6 +3,7 @@ import { Button } from "./Button.ts";
 import type { HEXColor } from "../Types/Color.ts";
 import { BG } from "./BG.ts";
 import type { MenuType } from "../Types/MenuType.ts";
+import { Menu } from "./Menu.ts";
 
 export class Game{
     private Canvas: HTMLCanvasElement;
@@ -33,10 +34,10 @@ export class Game{
     private StatBtn: Button;
     private BackBtn: Button;
 
-    public CurrentMenu: MenuType;
-
     private Ui: UI;
     private Bg: BG;
+    public CurrentMenu: MenuType;
+    private MenuBg: Menu;
 
     constructor(canvas: HTMLCanvasElement){
         // CANVAS
@@ -64,19 +65,21 @@ export class Game{
         this.MouseX = 0;
         this.MouseY = 0;
 
-        this.MineBtn = new Button(this, 'main', this.MainBtnColor, 'Bányák', this.BtnPositionX, this.BtnPositionY-this.OneNinthHeight*3, ()=>{this.CurrentMenu = 'mine'});
-        this.MarketBtn = new Button(this, 'main', this.MainBtnColor, 'Piac', this.BtnPositionX, this.BtnPositionY-this.OneNinthHeight*2, ()=>{this.CurrentMenu = 'market'});
-        this.TechBtn = new Button(this, 'main', this.MainBtnColor, 'Kutatás', this.BtnPositionX, this.BtnPositionY-this.OneNinthHeight, ()=>{this.CurrentMenu = 'tech'});
-        this.StatBtn = new Button(this, 'main',this.MainBtnColor, 'Statisztika', this.BtnPositionX, this.BtnPositionY, ()=>{this.CurrentMenu = 'stat'});
-        this.BackBtn = new Button(this, 'back',this.MainBtnColor, 'Vissza', this.BtnPositionX, this.BtnPositionY, ()=>{this.CurrentMenu = 'main'});
-
-        this.CurrentMenu = 'main';
+        this.MineBtn = new Button(this, this.MainBtnColor, 'Bányák', this.BtnPositionX, this.BtnPositionY-this.OneNinthHeight*3, ()=>{this.CurrentMenu = 'mine'});
+        this.MarketBtn = new Button(this, this.MainBtnColor, 'Piac', this.BtnPositionX, this.BtnPositionY-this.OneNinthHeight*2, ()=>{this.CurrentMenu = 'market'});
+        this.TechBtn = new Button(this, this.MainBtnColor, 'Kutatás', this.BtnPositionX, this.BtnPositionY-this.OneNinthHeight, ()=>{this.CurrentMenu = 'tech'});
+        this.StatBtn = new Button(this, this.MainBtnColor, 'Statisztika', this.BtnPositionX, this.BtnPositionY, ()=>{this.CurrentMenu = 'stat'});
+        this.BackBtn = new Button(this, this.MainBtnColor, 'Vissza', this.BtnPositionX, this.BtnPositionY, ()=>{this.CurrentMenu = 'main'});
 
         this.Ui = new UI(this);
         this.Bg = new BG(this, 'mars-img');
+        this.CurrentMenu = 'main';
+        this.MenuBg = new Menu(this);
     }
 
     update(){
+        this.MenuBg.update();
+        
         if (this.CurrentMenu == 'main') {
             this.MineBtn.update();
             this.MarketBtn.update();
@@ -87,16 +90,19 @@ export class Game{
         }
     }
 
-    draw(){
-        
+    draw(){      
         this.Bg.draw();
+        this.MenuBg.draw();
         this.Ui.draw();
         
-        this.BackBtn.draw();
-        this.MineBtn.draw();
-        this.MarketBtn.draw();
-        this.TechBtn.draw();
-        this.StatBtn.draw();
+        if (this.CurrentMenu == 'main') {
+            this.MineBtn.draw();
+            this.MarketBtn.draw();
+            this.TechBtn.draw();
+            this.StatBtn.draw();
+        } else {
+            this.BackBtn.draw();
+        }
     }
 
     loop(){
