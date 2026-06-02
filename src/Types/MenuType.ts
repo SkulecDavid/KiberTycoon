@@ -1,0 +1,1 @@
+export type MenuType = 'main' | 'mine' | 'market' | 'tech' | 'stat';

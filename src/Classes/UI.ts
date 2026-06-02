@@ -1,4 +1,3 @@
-import type { HEXColor } from "../Types/Color.ts";
 import type { Game } from "./Game.ts";
 
 export class UI{
@@ -6,7 +5,6 @@ export class UI{
     private Width: number;
     private ResourceHeight: number;
     private TerraHeight: number;
-    private Color: HEXColor;
     private Resources: string[];
 
     constructor(repo: Game){
@@ -14,7 +12,6 @@ export class UI{
         this.Width = this.Repo.OneFourthWidth;
         this.ResourceHeight = this.Repo.OneTwelfthHeight;
         this.TerraHeight = this.Repo.OneSixthHeight;
-        this.Color = '#e3c09d';
         this.Resources = ['Kreditek:', 'Alapanyagok:', 'Techpontok:', 'Terraformálás:']
     }
 
@@ -25,7 +22,7 @@ export class UI{
         ctx.textAlign = "left";
         
         for (let i = 0; i < 3; i++) {
-            ctx.fillStyle = this.Color;
+            ctx.fillStyle = this.Repo.LightColor;
             ctx.fillRect(0+i*this.Width, 0, this.Width, this.ResourceHeight);
             ctx.strokeRect(0+i*this.Width, 0, this.Width, this.ResourceHeight);
 
@@ -33,7 +30,7 @@ export class UI{
             ctx.fillText(this.Resources[i], 0+i*this.Width + this.Width/12, 0 + this.ResourceHeight/2+(this.Repo.FontSize/3));
         }
         
-        ctx.fillStyle = this.Color;
+        ctx.fillStyle = this.Repo.LightColor;
         ctx.fillRect(3*this.Width, 0, this.Width, this.TerraHeight);
         ctx.strokeRect(3*this.Width, 0, this.Width, this.TerraHeight);
 
