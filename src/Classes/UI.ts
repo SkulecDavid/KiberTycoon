@@ -5,14 +5,13 @@ export class UI{
     private Width: number;
     private ResourceHeight: number;
     private TerraHeight: number;
-    private Resources: string[];
+    private Resources: string[] = ['Kreditek:', 'Alapanyagok:', 'Techpontok:', 'Terraformálás:'];
 
     constructor(repo: Game){
         this.Repo = repo;
         this.Width = this.Repo.OneFourthWidth;
         this.ResourceHeight = this.Repo.OneTwelfthHeight;
         this.TerraHeight = this.Repo.OneSixthHeight;
-        this.Resources = ['Kreditek:', 'Alapanyagok:', 'Techpontok:', 'Terraformálás:']
     }
 
     draw(){

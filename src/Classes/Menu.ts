@@ -2,13 +2,11 @@ import type { Game } from "./Game.ts";
 
 export class Menu{
     private Repo: Game;
-    private Width: number;
-    private Height: number;
+    private Width: number = 0;
+    private Height: number = 0;
 
     constructor(repo: Game){
         this.Repo = repo;
-        this.Width = 0;
-        this.Height = 0;
     }
 
     update(){
