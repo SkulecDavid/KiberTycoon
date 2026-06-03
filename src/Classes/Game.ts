@@ -4,6 +4,8 @@ import { BG } from "./BG.ts";
 import { Menu } from "./Menu.ts";
 import type { HEXColor } from "../Types/Color.ts";
 import type { MenuType } from "../Types/MenuType.ts";
+import type { Terra } from "../Types/Terra.ts";
+import { Area } from "./Area.ts";
 
 
 export class Game{
@@ -34,10 +36,17 @@ export class Game{
     private StatBtn: Button;
     private BackBtn: Button;
 
-    private Ui: UI;
-    private Bg: BG;
+    private MainUi: UI;
+    private MainBg: BG;
     private MenuBg: Menu;
     public CurrentMenu: MenuType = 'main';
+
+    private BuildAreas: Area[][];
+
+    public Credit: number = 225;
+    public Material: number = 100;
+    public TechPoint: number = 0;
+    public TerraLvl: Terra = 0;
 
     constructor(canvas: HTMLCanvasElement){
         this.Canvas = canvas;
@@ -61,9 +70,23 @@ export class Game{
         this.BackBtn = new Button(this, this.MainBtnColor, 'Vissza', this.BtnPositionX, this.BtnPositionY, ()=>{this.CurrentMenu = 'main'});
 
         this.clickInput();
-        this.Ui = new UI(this);
-        this.Bg = new BG(this, 'mars-img');
+        this.MainUi = new UI(this);
+        this.MainBg = new BG(this, 'mars-img');
         this.MenuBg = new Menu(this);
+
+        this.BuildAreas = new Array(4);
+        for (let row = 0; row < 4; row++) {
+            this.BuildAreas[row] = new Array(5);
+            for (let col = 0; col < 5; col++) {
+                this.BuildAreas[row][col] = new Area(this, this.OneSixthHeight*(col+1), this.OneSixthHeight*(row+1));
+            }
+        }
+        for (let row = 1; row < 3; row++) {
+            for (let col = 1; col < 4; col++) {
+                this.BuildAreas[row][col].isBought = true;
+            }
+        }
+        //this.BuildAreas[2][3].isEmpty = false;
     }
 
     update(){
@@ -80,15 +103,21 @@ export class Game{
     }
 
     draw(){      
-        this.Bg.draw();
+        this.MainBg.draw();
         this.MenuBg.draw();
-        this.Ui.draw();
+        this.MainUi.draw();
         
         if (this.CurrentMenu == 'main') {
             this.MineBtn.draw();
             this.MarketBtn.draw();
             this.TechBtn.draw();
             this.StatBtn.draw();
+
+            for (let row = 0; row < 4; row++) {
+                for (let col = 0; col < 5; col++) {
+                    this.BuildAreas[row][col].draw();
+                }
+            }
         } else {
             this.BackBtn.draw();
         }

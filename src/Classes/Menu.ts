@@ -55,7 +55,20 @@ export class Menu{
 
                         ctx.fillText(mines[i-1], this.avg(this.Width*(i-1), this.Width*i), this.Repo.OneTwelfthHeight*1.5, this.Width);
                     }
-                    ctx.fillText(mines[3], this.avg(this.Width*3, this.Width*4), this.Repo.OneSixthHeight*1.25, this.Width);
+                    ctx.fillText(mines[3], this.avg(this.Width*3, this.Width*4), this.Repo.OneSixthHeight*1.2, this.Width);
+
+                    this.Width = this.Repo.OneTwelfthHeight*4;
+                    this.Height = this.Repo.OneTwentyfourthHeight*8;
+                    for (let i = 0; i < 4; i++) {
+                        const x = this.Repo.OneFourthWidth*i+this.Repo.OneTwentyfourthHeight*1.33;
+                        const y = this.Repo.OneSixthHeight+this.Repo.OneTwentyfourthHeight;
+                        ctx.strokeRect(x, y, this.Width, this.Height);
+                    }
+                    for (let i = 0; i < 4; i++) {
+                        const x = this.Repo.OneFourthWidth*i+this.Repo.OneTwentyfourthHeight*1.33;
+                        const y = this.Repo.OneSixthHeight+this.Repo.OneTwentyfourthHeight+this.Height;
+                        ctx.strokeRect(x, y, this.Width, this.Height);
+                    }
                     break
 
                 case 'market':

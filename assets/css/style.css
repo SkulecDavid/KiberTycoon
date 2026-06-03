@@ -35,7 +35,11 @@ h1 {
     pointer-events: none;
 }
 
-font-family: 'New Mars', sans-serif;
+@font-face {
+    font-family: 'New Mars', sans-serif;
+    src: url('https://fonts.cdnfonts.com/css/new-mars');
+}
+
 
 /*
 #f0e7e7
