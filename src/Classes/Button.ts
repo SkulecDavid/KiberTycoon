@@ -11,10 +11,10 @@ export class Button {
     private Y: number;
     private Event: Function;
 
-    constructor(repo: Game, color: HEXColor, text: string, x: number, y: number, event: Function) {
+    constructor(repo: Game, color: HEXColor, text: string, x: number, y: number, width: number, height: number, event: Function) {
         this.Repo = repo;
-        this.Width = this.Repo.OneFourthWidth;
-        this.Height = this.Repo.OneNinthHeight;
+        this.Width = width;
+        this.Height = height;
         this.Color = color;
         this.Text = text;
         this.X = x;

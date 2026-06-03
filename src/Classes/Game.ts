@@ -6,6 +6,7 @@ import type { HEXColor } from "../Types/Color.ts";
 import type { MenuType } from "../Types/MenuType.ts";
 import type { Terra } from "../Types/Terra.ts";
 import { Area } from "./Area.ts";
+//import { Mine } from "./Mine.ts";
 
 
 export class Game{
@@ -18,13 +19,21 @@ export class Game{
     public DarkColor: HEXColor = '#451804';
     public MainBtnColor: HEXColor = '#dd6345';
     public FontSize: number = 20;
-    public OneFourthWidth: number;
-    public OneTwentyfourthHeight: number;
+    public QuarterWidth: number;
     public OneTwelfthHeight: number;
-    public OneNinthHeight: number
     public OneSixthHeight: number;
     public BtnPositionX: number;
     public BtnPositionY: number;
+    public TerraTextHeight: number;
+    public MenuTextHeight: number;
+    public SmallDivX: number;
+    public SmallDivY: number;
+    public SmallDivHeight: number;
+    public LargeDivHeight: number;
+    public SmallDivWidth: number;
+    public MainBtnHeight: number;
+    public SmallBtnHeight: number;
+    public SmallBtnWidth: number;
 
     public MouseDown: boolean = false;
     public MouseX: number = 0;
@@ -41,6 +50,8 @@ export class Game{
     private MenuBg: Menu;
     public CurrentMenu: MenuType = 'main';
 
+    //private MineMenu: Mine;
+
     private BuildAreas: Area[][];
 
     public Credit: number = 225;
@@ -48,31 +59,46 @@ export class Game{
     public TechPoint: number = 0;
     public TerraLvl: Terra = 0;
 
+    public RawCoal: number = 0;
+    public RawCopper: number = 0;
+    public RawIron: number = 0;
+    public RawGold: number = 0;
+
     constructor(canvas: HTMLCanvasElement){
         this.Canvas = canvas;
         this.CanvasWidth = this.Canvas.width;
         this.CanvasHeight = this.Canvas.height;
         this.Ctx = this.Canvas.getContext('2d')!;
 
-        this.OneFourthWidth = this.CanvasWidth/4;
+        this.QuarterWidth = this.CanvasWidth/4;
         this.OneSixthHeight = this.CanvasHeight/6;
-        this.OneNinthHeight = this.CanvasHeight/9;
-        this.OneTwelfthHeight = this.OneSixthHeight/2
-        this.OneTwentyfourthHeight = this.OneTwelfthHeight/2
+        this.OneTwelfthHeight = this.OneSixthHeight/2;
+        this.TerraTextHeight = this.OneSixthHeight*1.2;
+        this.MenuTextHeight = this.OneTwelfthHeight*1.5;
+        this.SmallDivX = (this.OneTwelfthHeight/2)*1.33;
+        this.SmallDivY = this.OneSixthHeight+this.SmallDivX;
+        this.SmallDivHeight = (this.OneTwelfthHeight/2)*8;
+        this.LargeDivHeight = this.OneTwelfthHeight*7;
+        this.SmallDivWidth = this.OneTwelfthHeight*4;
+        this.MainBtnHeight = this.CanvasHeight/9;
+        this.SmallBtnHeight = this.MainBtnHeight*0.75;
+        this.SmallBtnWidth = this.OneTwelfthHeight*3.5;
         
-        this.BtnPositionX = this.CanvasWidth-this.OneFourthWidth;
-        this.BtnPositionY = this.CanvasHeight-this.OneNinthHeight;
+        this.BtnPositionX = this.CanvasWidth-this.QuarterWidth;
+        this.BtnPositionY = this.CanvasHeight-this.MainBtnHeight;
 
-        this.MineBtn = new Button(this, this.MainBtnColor, 'Bányák', this.BtnPositionX, this.BtnPositionY-this.OneNinthHeight*3, ()=>{this.CurrentMenu = 'mine'});
-        this.MarketBtn = new Button(this, this.MainBtnColor, 'Piac', this.BtnPositionX, this.BtnPositionY-this.OneNinthHeight*2, ()=>{this.CurrentMenu = 'market'});
-        this.TechBtn = new Button(this, this.MainBtnColor, 'Kutatás', this.BtnPositionX, this.BtnPositionY-this.OneNinthHeight, ()=>{this.CurrentMenu = 'tech'});
-        this.StatBtn = new Button(this, this.MainBtnColor, 'Statisztika', this.BtnPositionX, this.BtnPositionY, ()=>{this.CurrentMenu = 'stat'});
-        this.BackBtn = new Button(this, this.MainBtnColor, 'Vissza', this.BtnPositionX, this.BtnPositionY, ()=>{this.CurrentMenu = 'main'});
+        this.MineBtn = new Button(this, this.MainBtnColor, 'Bányák', this.BtnPositionX, this.BtnPositionY-this.MainBtnHeight*3, this.QuarterWidth, this.MainBtnHeight, ()=>{this.CurrentMenu = 'mine'});
+        this.MarketBtn = new Button(this, this.MainBtnColor, 'Piac', this.BtnPositionX, this.BtnPositionY-this.MainBtnHeight*2, this.QuarterWidth, this.MainBtnHeight, ()=>{this.CurrentMenu = 'market'});
+        this.TechBtn = new Button(this, this.MainBtnColor, 'Kutatás', this.BtnPositionX, this.BtnPositionY-this.MainBtnHeight, this.QuarterWidth, this.MainBtnHeight, ()=>{this.CurrentMenu = 'tech'});
+        this.StatBtn = new Button(this, this.MainBtnColor, 'Statisztika', this.BtnPositionX, this.BtnPositionY, this.QuarterWidth, this.MainBtnHeight, ()=>{this.CurrentMenu = 'stat'});
+        this.BackBtn = new Button(this, this.MainBtnColor, 'Vissza', this.BtnPositionX, this.BtnPositionY, this.QuarterWidth, this.MainBtnHeight, ()=>{this.CurrentMenu = 'main'});
 
         this.clickInput();
         this.MainUi = new UI(this);
         this.MainBg = new BG(this, 'mars-img');
         this.MenuBg = new Menu(this);
+
+        //this.MineMenu = new Mine(this, this.QuarterWidth-(this.OneTwelfthHeight*3.5)/2, this.OneSixthHeight*1.25, {type: 'Szén', number: 1, price: 200, upgrade: 100, speed: 64})
 
         this.BuildAreas = new Array(4);
         for (let row = 0; row < 4; row++) {
@@ -86,7 +112,6 @@ export class Game{
                 this.BuildAreas[row][col].isBought = true;
             }
         }
-        //this.BuildAreas[2][3].isEmpty = false;
     }
 
     update(){
@@ -119,6 +144,9 @@ export class Game{
                 }
             }
         } else {
+            /*if (this.CurrentMenu == 'mine') {
+                this.MineMenu.draw();
+            }*/
             this.BackBtn.draw();
         }
     }
@@ -141,5 +169,9 @@ export class Game{
             this.MouseY = e.y - (20+20+28+20+5) // div margin + 2x h1 margin + hi font-size + canvas border
             this.MouseDown = true;
         })
+    }
+
+    avg(a: number, b: number): number{
+        return (a+b)/2;
     }
 }

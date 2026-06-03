@@ -16,7 +16,7 @@ export class UI{
 
     constructor(repo: Game){
         this.Repo = repo;
-        this.Width = this.Repo.OneFourthWidth;
+        this.Width = this.Repo.QuarterWidth;
         this.ResourceHeight = this.Repo.OneTwelfthHeight;
         this.TerraHeight = this.Repo.OneSixthHeight;
         this.Levels = [this.Repo.Credit, this.Repo.Material, this.Repo.TechPoint, this.Repo.TerraLvl];

@@ -12,20 +12,20 @@ export class Menu{
     update(){
         switch (this.Repo.CurrentMenu) {
             case 'mine':
-                this.Width = this.Repo.OneFourthWidth;
+                this.Width = this.Repo.QuarterWidth;
                 this.Height = this.Repo.CanvasHeight;
                 break
             case 'market':
-                this.Width = this.Repo.OneTwelfthHeight*4;
-                this.Height = this.Repo.OneTwentyfourthHeight*8;
+                this.Width = this.Repo.SmallDivWidth;
+                this.Height = this.Repo.SmallDivHeight;
                 break
             case 'tech':
-                this.Width = this.Repo.OneFourthWidth;
+                this.Width = this.Repo.QuarterWidth;
                 this.Height = this.Repo.CanvasHeight;
                 break
             case 'stat':
-                this.Width = this.Repo.OneTwelfthHeight*4;
-                this.Height = this.Repo.OneTwelfthHeight*7;
+                this.Width = this.Repo.SmallDivWidth;
+                this.Height = this.Repo.LargeDivHeight;
                 break
             default:
                 this.Width = 0;
@@ -53,20 +53,20 @@ export class Menu{
                         ctx.lineTo(this.Width*i, 0);
                         ctx.stroke();
 
-                        ctx.fillText(mines[i-1], this.avg(this.Width*(i-1), this.Width*i), this.Repo.OneTwelfthHeight*1.5, this.Width);
+                        ctx.fillText(mines[i-1], this.avg(this.Width*(i-1), this.Width*i), this.Repo.MenuTextHeight, this.Width);
                     }
-                    ctx.fillText(mines[3], this.avg(this.Width*3, this.Width*4), this.Repo.OneSixthHeight*1.2, this.Width);
+                    ctx.fillText(mines[3], this.avg(this.Width*3, this.Width*4), this.Repo.TerraTextHeight, this.Width);
 
-                    this.Width = this.Repo.OneTwelfthHeight*4;
-                    this.Height = this.Repo.OneTwentyfourthHeight*8;
+                    this.Width = this.Repo.SmallDivWidth;
+                    this.Height = this.Repo.SmallDivHeight;
                     for (let i = 0; i < 4; i++) {
-                        const x = this.Repo.OneFourthWidth*i+this.Repo.OneTwentyfourthHeight*1.33;
-                        const y = this.Repo.OneSixthHeight+this.Repo.OneTwentyfourthHeight;
+                        const x = this.Repo.QuarterWidth*i+this.Repo.SmallDivX;
+                        const y = this.Repo.SmallDivY;
                         ctx.strokeRect(x, y, this.Width, this.Height);
                     }
                     for (let i = 0; i < 4; i++) {
-                        const x = this.Repo.OneFourthWidth*i+this.Repo.OneTwentyfourthHeight*1.33;
-                        const y = this.Repo.OneSixthHeight+this.Repo.OneTwentyfourthHeight+this.Height;
+                        const x = this.Repo.QuarterWidth*i+this.Repo.SmallDivX;
+                        const y = this.Repo.SmallDivY+this.Height;
                         ctx.strokeRect(x, y, this.Width, this.Height);
                     }
                     break
@@ -75,15 +75,15 @@ export class Menu{
                     const items = ['Szén', 'Réz', 'Vas', 'Arany', 'Kábel', 'Acél', 'Chip', 'Elektronika'];
                     const prices = [1, 2, 3, 4, 4, 8, 12, 26];
                     for (let i = 0; i < 4; i++) {
-                        const x = this.Repo.OneFourthWidth*i+this.Repo.OneTwentyfourthHeight*1.33;
-                        const y = this.Repo.OneSixthHeight+this.Repo.OneTwentyfourthHeight;
+                        const x = this.Repo.QuarterWidth*i+this.Repo.SmallDivX;
+                        const y = this.Repo.SmallDivY;
                         ctx.strokeRect(x, y, this.Width, this.Height);
                         ctx.fillText(items[i], this.avg(x, x+this.Width), y+this.Height/5, this.Width);
                         ctx.fillText(prices[i].toString()+'KR / db', this.avg(x, x+this.Width), y+(this.Height/5)*2, this.Width);
                     }
                     for (let i = 0; i < 4; i++) {
-                        const x = this.Repo.OneFourthWidth*i+this.Repo.OneTwentyfourthHeight*1.33;
-                        const y = this.Repo.OneSixthHeight+this.Repo.OneTwentyfourthHeight+this.Height;
+                        const x = this.Repo.QuarterWidth*i+this.Repo.SmallDivX;
+                        const y = this.Repo.SmallDivY+this.Height;
                         ctx.strokeRect(x, y, this.Width, this.Height);
                         ctx.fillText(items[4+i], this.avg(x, x+this.Width), y+this.Height/5, this.Width);
                         ctx.fillText(prices[4+i].toString()+'KR / db', this.avg(x, x+this.Width), y+(this.Height/5)*2, this.Width);
@@ -110,14 +110,14 @@ export class Menu{
                         ctx.lineTo(this.Width*i, 0);
                         ctx.stroke();
 
-                        ctx.fillText(i+'. Szint', this.avg(this.Width*(i-1), this.Width*i), this.Repo.OneTwelfthHeight*1.5, this.Width);
+                        ctx.fillText(i+'. Szint', this.avg(this.Width*(i-1), this.Width*i), this.Repo.MenuTextHeight, this.Width);
                     }
-                    ctx.fillText('4. Szint', this.avg(this.Width*3, this.Width*4), this.Repo.OneSixthHeight*1.25, this.Width);
+                    ctx.fillText('4. Szint', this.avg(this.Width*3, this.Width*4), this.Repo.TerraTextHeight, this.Width);
                     break
 
                 case 'stat':
                     for (let i = 0; i < 4; i++) {
-                        ctx.strokeRect(this.Repo.OneFourthWidth*i+this.Repo.OneTwentyfourthHeight*1.33, this.Repo.OneSixthHeight+this.Repo.OneTwentyfourthHeight, this.Width, this.Height);
+                        ctx.strokeRect(this.Repo.QuarterWidth*i+this.Repo.SmallDivX, this.Repo.SmallDivY, this.Width, this.Height);
                     }
                     break
             }
