@@ -7,8 +7,7 @@ export class Area {
     private X: number;
     private Y: number;
     private Color: HEXColor = '#000'
-    public isEmpty: boolean = true;
-    public isBought: boolean = false;
+    public Status: 'locked' | 'empty' | 'used' = 'locked';
 
     constructor(repo: Game, x: number, y: number){
         this.Repo = repo;
@@ -20,20 +19,19 @@ export class Area {
     draw(){
         const ctx = this.Repo.Ctx;
 
-        if (this.isEmpty) {
-            if (this.isBought) {
-                ctx.fillStyle = this.Color;
-                ctx.globalAlpha = 0.3;
-                ctx.fillRect(this.X, this.Y, this.Size, this.Size);
-                ctx.globalAlpha = 1;
-                ctx.strokeRect(this.X, this.Y, this.Size, this.Size);
-            } else {
-                ctx.fillStyle = this.Color;
-                ctx.globalAlpha = 0.4;
-                ctx.fillRect(this.X, this.Y, this.Size, this.Size);
-                ctx.globalAlpha = 1;
-                ctx.strokeRect(this.X, this.Y, this.Size, this.Size);
-            }
+        if (this.Status == 'locked') {
+            ctx.fillStyle = this.Color;
+            ctx.globalAlpha = 0.4;
+            ctx.fillRect(this.X, this.Y, this.Size, this.Size);
+            ctx.globalAlpha = 1;
+            ctx.strokeRect(this.X, this.Y, this.Size, this.Size);
         }
+        if (this.Status == 'empty') {
+            ctx.fillStyle = this.Color;
+            ctx.globalAlpha = 0.3;
+            ctx.fillRect(this.X, this.Y, this.Size, this.Size);
+            ctx.globalAlpha = 1;
+            ctx.strokeRect(this.X, this.Y, this.Size, this.Size);
+        } 
     }
 }

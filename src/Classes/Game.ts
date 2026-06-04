@@ -6,7 +6,8 @@ import type { HEXColor } from "../Types/Color.ts";
 import type { MenuType } from "../Types/MenuType.ts";
 import type { Terra } from "../Types/Terra.ts";
 import { Area } from "./Area.ts";
-//import { Mine } from "./Mine.ts";
+import { Mine } from "./Mine.ts";
+import type { MineIF } from "../Types/MineIF.ts";
 
 
 export class Game{
@@ -51,6 +52,8 @@ export class Game{
     public CurrentMenu: MenuType = 'main';
 
     //private MineMenu: Mine;
+
+    private Mines: Mine[];
 
     private BuildAreas: Area[][];
 
@@ -98,7 +101,21 @@ export class Game{
         this.MainBg = new BG(this, 'mars-img');
         this.MenuBg = new Menu(this);
 
-        //this.MineMenu = new Mine(this, this.QuarterWidth-(this.OneTwelfthHeight*3.5)/2, this.OneSixthHeight*1.25, {type: 'Szén', number: 1, price: 200, upgrade: 100, speed: 64})
+        /*this.MineMenu = new Mine(this, {type: 1, number: 0, price: 200, upgrade: 100, speed: 64})
+        this.MineMenu.IsAvailable = true;
+        this.MineMenu.Level = 1;*/
+        
+        this.Mines = new Array();
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 2; j++) {
+                this.Mines.push(new Mine(this, {type: i, number: j, price: 200*(2**(i)), upgrade: (200*(2**(i)))/2, speed: 64-(16*i)}));
+                if (i == 0) {
+                    this.Mines[j].IsAvailable = true;
+                }
+            }
+        }
+        console.log(this.Mines);
+        
 
         this.BuildAreas = new Array(4);
         for (let row = 0; row < 4; row++) {
@@ -109,13 +126,14 @@ export class Game{
         }
         for (let row = 1; row < 3; row++) {
             for (let col = 1; col < 4; col++) {
-                this.BuildAreas[row][col].isBought = true;
+                this.BuildAreas[row][col].Status = 'empty';
             }
         }
     }
 
     update(){
         this.MenuBg.update();
+        this.MainUi.update();
         
         if (this.CurrentMenu == 'main') {
             this.MineBtn.update();
@@ -123,6 +141,13 @@ export class Game{
             this.TechBtn.update();
             this.StatBtn.update();
         } else {
+            if (this.CurrentMenu == 'mine') {
+                //this.MineMenu.update();
+                this.Mines.forEach(mine => {
+                    //mine.IsAvailable = true;
+                    mine.update();
+                });
+            }
             this.BackBtn.update();
         }
     }
@@ -144,9 +169,12 @@ export class Game{
                 }
             }
         } else {
-            /*if (this.CurrentMenu == 'mine') {
-                this.MineMenu.draw();
-            }*/
+            if (this.CurrentMenu == 'mine') {
+                //this.MineMenu.draw();
+                this.Mines.forEach(mine => {
+                    mine.draw();
+                });
+            }
             this.BackBtn.draw();
         }
     }

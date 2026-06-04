@@ -21,6 +21,10 @@ export class UI{
         this.TerraHeight = this.Repo.OneSixthHeight;
         this.Levels = [this.Repo.Credit, this.Repo.Material, this.Repo.TechPoint, this.Repo.TerraLvl];
     }
+    
+    update(){
+        this.Levels = [this.Repo.Credit, this.Repo.Material, this.Repo.TechPoint, this.Repo.TerraLvl];
+    }
 
     draw(){
         const ctx = this.Repo.Ctx;
