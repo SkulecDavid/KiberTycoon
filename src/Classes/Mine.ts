@@ -5,11 +5,13 @@ import type { Game } from "./Game";
 export class Mine {
     private Repo: Game;
     public Stats: MineIF;
-    public Level: 0 | 1 | 2 = 0; // SHOULD BE 0
-    public IsAvailable: boolean = false;
+    public Level: 0 | 1 | 2 = 0; // DEFAULT 0
+    public IsAvailable: boolean = false; // DEFAULT false
     private Cap: number = 20;
     public Load: number = 0;
     private Materials: string[] = ['Szén', 'Réz', 'Vas', 'Arany'];
+    private CounterStop: number;
+    private CounterValue: number = 0;
     private BuyBtn?: Button;
     private UpgradeBtn?: Button;
     private CollectBtn?: Button;
@@ -17,6 +19,7 @@ export class Mine {
     constructor(repo: Game, stats: MineIF) {
         this.Repo = repo;
         this.Stats = stats;
+        this.CounterStop = Math.round(60/this.Stats.speed*60*2);
     }
 
     update(){
@@ -28,7 +31,19 @@ export class Mine {
         }
         if (this.CollectBtn) {
             this.CollectBtn.update();
-        } // DO ACTUAL PRODUCING
+        }
+        if (this.Level != 0) {
+            if (this.Load < this.Cap) {
+                if (this.CounterValue == this.CounterStop) {
+                    this.Load++;
+                    this.CounterValue = 0;
+                    this.Repo.Material += this.Stats.material;
+                    this.Repo.TechPoint += this.Stats.tech;
+                } else {
+                    this.CounterValue++;
+                }
+            }
+        }
     }
 
     draw(){
@@ -50,14 +65,14 @@ export class Mine {
 
             } else {
                 if (this.Level == 1) {
-                    this.UpgradeBtn = new Button(this.Repo, this.Repo.MainBtnColor, `Fejlesztés: ${this.Stats.upgrade} KR`, x, y+this.Repo.SmallDivHeight/4-btnOffset, width, height, ()=>{console.log('ok')})
+                    this.UpgradeBtn = new Button(this.Repo, this.Repo.MainBtnColor, `Fejlesztés: ${this.Stats.upgrade} KR`, x, y+this.Repo.SmallDivHeight/4-btnOffset, width, height, ()=>{this.upgradeMine()})
                     this.UpgradeBtn.draw();
                 }
 
-                ctx.fillText(`${this.Materials[this.Stats.type]}bánya ${this.Stats.number+1}`, TextX, y-this.Repo.SmallDivHeight/4);
-                ctx.fillText(`${this.Cap}/${this.Load}   ${this.Stats.speed}/perc`, TextX, y-this.Repo.SmallDivHeight/16);
+                ctx.fillText(`${this.Materials[this.Stats.type]}bánya ${this.Stats.number+1} (LVL ${this.Level})`, TextX, y-this.Repo.SmallDivHeight/4);
+                ctx.fillText(`${this.Cap}/${this.Load}   ~${this.Stats.speed}/perc`, TextX, y-this.Repo.SmallDivHeight/16);
 
-                this.CollectBtn = new Button(this.Repo, this.Repo.MainBtnColor, "Begyűjtés", x, y+this.Repo.SmallDivHeight/2-btnOffset, width, height, ()=>{console.log('ok')})
+                this.CollectBtn = new Button(this.Repo, this.Repo.MainBtnColor, "Begyűjtés", x, y+this.Repo.SmallDivHeight/2-btnOffset, width, height, ()=>{this.collectMine()})
                 this.CollectBtn.draw();
             }
 
@@ -71,17 +86,34 @@ export class Mine {
             this.Repo.Credit -= this.Stats.price;
             this.Level = 1;
         }
-        else {
-            alert('Nincs elég KR!')
-        }
     }
 
     upgradeMine(){
-
+        if (this.Repo.Credit >= this.Stats.upgrade) {
+            this.Repo.Credit -= this.Stats.upgrade;
+            this.Level = 2;
+            this.Stats.material *= 1.5;
+            this.Stats.tech *= 1.5;
+            this.Stats.speed *= 1.5;
+        }
     }
 
     collectMine(){
-
+        switch (this.Stats.type) {
+            case 0:
+                this.Repo.RawCoal += this.Load;
+                break
+            case 1:
+                this.Repo.RawCopper += this.Load;
+                break
+            case 2:
+                this.Repo.RawIron += this.Load;
+                break
+            case 3:
+                this.Repo.RawGold += this.Load;
+                break
+        }
+        this.Load = 0;
     }
 
     avg(a: number, b: number): number{

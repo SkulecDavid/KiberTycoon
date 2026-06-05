@@ -1,22 +1,53 @@
-import type { HEXColor } from "../Types/Color";
-import type { Game } from "./Game";
+import type { HEXColor } from "../Types/Color.ts";
+import type { Building } from "./Building/Building.ts";
+import { StorageBuild } from "./Building/StorageBuild.ts";
+import { Button } from "./Button.ts";
+import type { Game } from "./Game.ts";
 
 export class Area {
     private Repo: Game;
     private Size: number;
     private X: number;
     private Y: number;
+    private Position: [row: number, col: number];
     private Color: HEXColor = '#000'
     public Status: 'locked' | 'empty' | 'used' = 'locked';
+    public Build?: Building;
+    private Buttons?: Button[] = undefined
+    private BuildingPrices: number[] = [25, 100, 150, 250, 500, 200, 350, 550, 800, 30, 60, 90, 120]
+        // 0-storage 1-4-refinery 5-8-factory 9-12-terraform
 
-    constructor(repo: Game, x: number, y: number){
+    constructor(repo: Game, position: [number, number]){
         this.Repo = repo;
         this.Size = this.Repo.OneSixthHeight;
-        this.X = x;
-        this.Y = y;
+        this.Position = position;
+        this.X = this.Repo.OneSixthHeight*(this.Position[1]+1);
+        this.Y = this.Repo.OneSixthHeight*(this.Position[0]+1);
+    }
+
+    update(){
+        if (this.Status == 'empty'){
+            this.buyBuilding();
+        } else {
+            this.Buttons = undefined
+        }
+
+        if (this.Build) {
+            this.Build.update();
+        }
     }
 
     draw(){
+        if (this.Buttons) {
+            this.Buttons.forEach(btn => {
+                btn.draw();
+            });
+        }
+
+        if (this.Build){
+            this.Build.draw();
+        }
+
         const ctx = this.Repo.Ctx;
 
         if (this.Status == 'locked') {
@@ -33,5 +64,38 @@ export class Area {
             ctx.globalAlpha = 1;
             ctx.strokeRect(this.X, this.Y, this.Size, this.Size);
         } 
+    }
+
+    buyBuilding(){
+        if (this.Buttons) {
+            this.Buttons.forEach(btn => {
+                btn.update();
+            });
+        }
+
+        const mx = this.Repo.MouseX;
+        const my = this.Repo.MouseY;
+        if (this.Repo.MouseDown) {
+            if (mx > this.X && mx < this.X+this.Size &&
+                my > this.Y && my < this.Y+this.Size) {
+                this.Buttons = new Array();
+                this.Buttons.push(new Button(this.Repo, '#d69f3d', 'Rakt.', this.X, this.Y, this.Size/2, this.Size/2, ()=>{this.storageBtn()}));
+                this.Buttons.push(new Button(this.Repo, '#d76b3c', 'Feld.', this.X+this.Size/2, this.Y, this.Size/2, this.Size/2, ()=>{console.log('feldolgoz')}));
+                this.Buttons.push(new Button(this.Repo, '#b93f3f', 'Gyár', this.X, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{console.log('gyar')}));
+                this.Buttons.push(new Button(this.Repo, '#5a9e4e', 'Terr.', this.X+this.Size/2, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{console.log('terra')}));
+            } else {
+                this.Buttons = undefined;
+            }
+        }
+    }
+
+    storageBtn(){
+        if (confirm(`Akarsz egy raktárat építeni (${this.BuildingPrices[0]} KR)?`)) {
+            if (this.Repo.Credit >= this.BuildingPrices[0]) {
+                this.Status = 'used';
+                this.Repo.Credit -= this.BuildingPrices[0];
+                this.Build = new StorageBuild(this.Repo, this.Position, ()=>{console.log('ok')})
+            }
+        }
     }
 }

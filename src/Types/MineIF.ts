@@ -4,4 +4,6 @@ export interface MineIF {
     price: number;
     upgrade: number;
     speed: number;
+    material: number;
+    tech: number;
 }

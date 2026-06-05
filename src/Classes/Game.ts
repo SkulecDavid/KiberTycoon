@@ -7,7 +7,7 @@ import type { MenuType } from "../Types/MenuType.ts";
 import type { Terra } from "../Types/Terra.ts";
 import { Area } from "./Area.ts";
 import { Mine } from "./Mine.ts";
-import type { MineIF } from "../Types/MineIF.ts";
+import { Building } from "./Building/Building.ts";
 
 
 export class Game{
@@ -35,6 +35,7 @@ export class Game{
     public MainBtnHeight: number;
     public SmallBtnHeight: number;
     public SmallBtnWidth: number;
+    public BuildingSize: number;
 
     public MouseDown: boolean = false;
     public MouseX: number = 0;
@@ -52,13 +53,14 @@ export class Game{
     public CurrentMenu: MenuType = 'main';
 
     //private MineMenu: Mine;
+    //private Build: Building;
 
     private Mines: Mine[];
 
     private BuildAreas: Area[][];
 
-    public Credit: number = 225;
-    public Material: number = 100;
+    public Credit: number = 225; // DEFAULT 225
+    public Material: number = 0; // DEFAULT 0
     public TechPoint: number = 0;
     public TerraLvl: Terra = 0;
 
@@ -86,6 +88,7 @@ export class Game{
         this.MainBtnHeight = this.CanvasHeight/9;
         this.SmallBtnHeight = this.MainBtnHeight*0.75;
         this.SmallBtnWidth = this.OneTwelfthHeight*3.5;
+        this.BuildingSize = this.OneSixthHeight/2;
         
         this.BtnPositionX = this.CanvasWidth-this.QuarterWidth;
         this.BtnPositionY = this.CanvasHeight-this.MainBtnHeight;
@@ -104,11 +107,12 @@ export class Game{
         /*this.MineMenu = new Mine(this, {type: 1, number: 0, price: 200, upgrade: 100, speed: 64})
         this.MineMenu.IsAvailable = true;
         this.MineMenu.Level = 1;*/
+        //this.Build = new Building(this, [0,0], ()=>{console.log('ok')})
         
         this.Mines = new Array();
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 2; j++) {
-                this.Mines.push(new Mine(this, {type: i, number: j, price: 200*(2**(i)), upgrade: (200*(2**(i)))/2, speed: 64-(16*i)}));
+                this.Mines.push(new Mine(this, {type: i, number: j, price: 200*(2**(i)), upgrade: (200*(2**(i)))/2, speed: 64-(16*i), material:(i+1)*2, tech:(i+1)*4}));
                 if (i == 0) {
                     this.Mines[j].IsAvailable = true;
                 }
@@ -116,12 +120,13 @@ export class Game{
         }
         console.log(this.Mines);
         
+        
 
         this.BuildAreas = new Array(4);
         for (let row = 0; row < 4; row++) {
             this.BuildAreas[row] = new Array(5);
             for (let col = 0; col < 5; col++) {
-                this.BuildAreas[row][col] = new Area(this, this.OneSixthHeight*(col+1), this.OneSixthHeight*(row+1));
+                this.BuildAreas[row][col] = new Area(this, [row, col]);
             }
         }
         for (let row = 1; row < 3; row++) {
@@ -140,6 +145,14 @@ export class Game{
             this.MarketBtn.update();
             this.TechBtn.update();
             this.StatBtn.update();
+
+            for (let row = 0; row < 4; row++) {
+                for (let col = 0; col < 5; col++) {
+                    this.BuildAreas[row][col].update();
+                }
+            }
+
+            //this.Build.update();
         } else {
             if (this.CurrentMenu == 'mine') {
                 //this.MineMenu.update();
@@ -168,6 +181,8 @@ export class Game{
                     this.BuildAreas[row][col].draw();
                 }
             }
+
+            //this.Build.draw();
         } else {
             if (this.CurrentMenu == 'mine') {
                 //this.MineMenu.draw();
