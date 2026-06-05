@@ -1,5 +1,6 @@
 import type { HEXColor } from "../Types/Color.ts";
 import type { Building } from "./Building/Building.ts";
+import { RefineBuild } from "./Building/RefineBuild.ts";
 import { StorageBuild } from "./Building/StorageBuild.ts";
 import { Button } from "./Button.ts";
 import type { Game } from "./Game.ts";
@@ -38,16 +39,6 @@ export class Area {
     }
 
     draw(){
-        if (this.Buttons) {
-            this.Buttons.forEach(btn => {
-                btn.draw();
-            });
-        }
-
-        if (this.Build){
-            this.Build.draw();
-        }
-
         const ctx = this.Repo.Ctx;
 
         if (this.Status == 'locked') {
@@ -63,7 +54,17 @@ export class Area {
             ctx.fillRect(this.X, this.Y, this.Size, this.Size);
             ctx.globalAlpha = 1;
             ctx.strokeRect(this.X, this.Y, this.Size, this.Size);
-        } 
+        }
+
+        if (this.Build){
+            this.Build.draw();
+        }
+
+        if (this.Buttons) {
+            this.Buttons.forEach(btn => {
+                btn.draw();
+            });
+        }
     }
 
     buyBuilding(){
@@ -80,9 +81,9 @@ export class Area {
                 my > this.Y && my < this.Y+this.Size) {
                 this.Buttons = new Array();
                 this.Buttons.push(new Button(this.Repo, '#d69f3d', 'Rakt.', this.X, this.Y, this.Size/2, this.Size/2, ()=>{this.storageBtn()}));
-                this.Buttons.push(new Button(this.Repo, '#d76b3c', 'Feld.', this.X+this.Size/2, this.Y, this.Size/2, this.Size/2, ()=>{console.log('feldolgoz')}));
-                this.Buttons.push(new Button(this.Repo, '#b93f3f', 'Gyár', this.X, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{console.log('gyar')}));
-                this.Buttons.push(new Button(this.Repo, '#5a9e4e', 'Terr.', this.X+this.Size/2, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{console.log('terra')}));
+                this.Buttons.push(new Button(this.Repo, '#d76b3c', 'Feld.', this.X+this.Size/2, this.Y, this.Size/2, this.Size/2, ()=>{this.refineryBtn()}));
+                //this.Buttons.push(new Button(this.Repo, '#b93f3f', 'Gyár', this.X, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{console.log('gyar')}));
+                //this.Buttons.push(new Button(this.Repo, '#5a9e4e', 'Terr.', this.X+this.Size/2, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{console.log('terra')}));
             } else {
                 this.Buttons = undefined;
             }
@@ -94,7 +95,26 @@ export class Area {
             if (this.Repo.Credit >= this.BuildingPrices[0]) {
                 this.Status = 'used';
                 this.Repo.Credit -= this.BuildingPrices[0];
-                this.Build = new StorageBuild(this.Repo, this.Position, ()=>{console.log('ok')})
+                this.Build = new StorageBuild(this.Repo, this.Position);
+            }
+        }
+    }
+
+    refineryBtn(){
+        this.Buttons = undefined;
+        this.Buttons = new Array();
+        this.Buttons.push(new Button(this.Repo, '#d76b3c', 'Szén', this.X, this.Y, this.Size/2, this.Size/2, ()=>{this.newRefine(0)}));
+        this.Buttons.push(new Button(this.Repo, '#d76b3c', 'Réz', this.X+this.Size/2, this.Y, this.Size/2, this.Size/2, ()=>{this.newRefine(1)}));
+        this.Buttons.push(new Button(this.Repo, '#d76b3c', 'Vas', this.X, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{this.newRefine(2)}));
+        this.Buttons.push(new Button(this.Repo, '#d76b3c', 'Arany', this.X+this.Size/2, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{this.newRefine(4)}));
+    }
+
+    newRefine(type: number){
+        if (confirm(`Akarsz egy feldolgozót építeni (${this.BuildingPrices[0+type]} KR)?`)) {
+            if (this.Repo.Credit >= this.BuildingPrices[1+type]) {
+                this.Status = 'used';
+                this.Repo.Credit -= this.BuildingPrices[0+type];
+                this.Build = new RefineBuild(this.Repo, this.Position, 0+type);
             }
         }
     }

@@ -6,7 +6,7 @@ export class Button {
     private Width: number;
     private Height: number;
     private Color: HEXColor;
-    private Text: string;
+    public Text: string;
     private X: number;
     private Y: number;
     private Event: Function;

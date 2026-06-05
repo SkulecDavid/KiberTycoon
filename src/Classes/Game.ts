@@ -55,19 +55,20 @@ export class Game{
     //private MineMenu: Mine;
     //private Build: Building;
 
-    private Mines: Mine[];
+    public Mines: Mine[];
 
-    private BuildAreas: Area[][];
+    public BuildAreas: Area[][];
+    public Technologies: Boolean[] = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
 
     public Credit: number = 225; // DEFAULT 225
     public Material: number = 0; // DEFAULT 0
     public TechPoint: number = 0;
     public TerraLvl: Terra = 0;
 
-    public RawCoal: number = 0;
-    public RawCopper: number = 0;
-    public RawIron: number = 0;
-    public RawGold: number = 0;
+    public FullCap: number = 0;
+    public RawMaterials: number[] = [0, 0, 0, 0];
+    public Materials: number[] = [0, 0, 0, 0];
+    public Items: number[] = [0, 0, 0, 0];
 
     constructor(canvas: HTMLCanvasElement){
         this.Canvas = canvas;
@@ -160,6 +161,8 @@ export class Game{
                     //mine.IsAvailable = true;
                     mine.update();
                 });
+                console.log(this.FullCap);
+                
             }
             this.BackBtn.update();
         }

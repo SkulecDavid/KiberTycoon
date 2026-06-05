@@ -10,8 +10,8 @@ export class Mine {
     private Cap: number = 20;
     public Load: number = 0;
     private Materials: string[] = ['Szén', 'Réz', 'Vas', 'Arany'];
-    private CounterStop: number;
-    private CounterValue: number = 0;
+    public TimerStop: number;
+    private TimerValue: number = 0;
     private BuyBtn?: Button;
     private UpgradeBtn?: Button;
     private CollectBtn?: Button;
@@ -19,7 +19,7 @@ export class Mine {
     constructor(repo: Game, stats: MineIF) {
         this.Repo = repo;
         this.Stats = stats;
-        this.CounterStop = Math.round(60/this.Stats.speed*60*2);
+        this.TimerStop = Math.round(60/this.Stats.speed*60*2);
     }
 
     update(){
@@ -34,13 +34,13 @@ export class Mine {
         }
         if (this.Level != 0) {
             if (this.Load < this.Cap) {
-                if (this.CounterValue == this.CounterStop) {
+                if (this.TimerValue == this.TimerStop) {
                     this.Load++;
-                    this.CounterValue = 0;
+                    this.TimerValue = 0;
                     this.Repo.Material += this.Stats.material;
                     this.Repo.TechPoint += this.Stats.tech;
                 } else {
-                    this.CounterValue++;
+                    this.TimerValue++;
                 }
             }
         }
@@ -99,21 +99,16 @@ export class Mine {
     }
 
     collectMine(){
-        switch (this.Stats.type) {
-            case 0:
-                this.Repo.RawCoal += this.Load;
-                break
-            case 1:
-                this.Repo.RawCopper += this.Load;
-                break
-            case 2:
-                this.Repo.RawIron += this.Load;
-                break
-            case 3:
-                this.Repo.RawGold += this.Load;
-                break
+        const storaged = this.Repo.RawMaterials[this.Stats.type]
+        if (storaged < this.Repo.FullCap) {
+            if (storaged + this.Load <= this.Repo.FullCap) {
+                this.Repo.RawMaterials[this.Stats.type] += this.Load;
+                this.Load = 0;
+            } else {
+                this.Load -= this.Repo.FullCap - storaged;
+                this.Repo.RawMaterials[this.Stats.type] = this.Repo.FullCap;
+            }
         }
-        this.Load = 0;
     }
 
     avg(a: number, b: number): number{

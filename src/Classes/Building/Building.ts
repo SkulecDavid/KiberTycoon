@@ -1,4 +1,5 @@
 import type { HEXColor } from "../../Types/Color.ts";
+import type { Button } from "../Button.ts";
 import type { Game } from "../Game.ts";
 
 export class Building{
@@ -6,10 +7,14 @@ export class Building{
     protected Position: [row: number, col: number];
     protected Color: HEXColor = '#fff';
     protected Size: number;
-    protected Event: Function;
+    protected Event: Function
     protected X: number;
     protected Y: number;
     protected Level: number = 0;
+    protected MaxLevel: number = 1;
+    protected UpgradePrice: number = 0;
+    protected Buttons?: Button[];
+    protected TechUnlocked: number = 0;
 
     constructor(repo: Game, position: [number, number], event: Function) {
         this.Repo = repo;
@@ -23,16 +28,31 @@ export class Building{
     update(){
         const mx = this.Repo.MouseX;
         const my = this.Repo.MouseY;
-        if (this.Repo.MouseDown &&
-            mx > this.X && mx < this.X+this.Size &&
-            my > this.Y && my < this.Y+this.Size) {
-            this.Event();
+        if (this.Repo.MouseDown) {
+                if (mx > this.X && mx < this.X+this.Size &&
+                    my > this.Y && my < this.Y+this.Size) {
+                this.Event();
+            } else {
+                this.Buttons = undefined;
+            }
+        }
+
+        if (this.Buttons){
+            this.Buttons.forEach(btn => {
+                btn.update();
+            });
         }
     }
 
-    draw() {
+    draw(){
         const ctx = this.Repo.Ctx;
         ctx.fillStyle = this.Color;
         ctx.fillRect(this.X, this.Y, this.Size, this.Size)
+
+        if (this.Buttons){
+            this.Buttons.forEach(btn => {
+                btn.draw();
+            });
+        }
     }
 }
