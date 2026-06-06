@@ -37,6 +37,7 @@ export class RefineBuild extends Building {
             if (raws >= 2) {
                 while (true) {
                     if (this.TimerValue == this.TimerStop) {
+                        this.Repo.RawMaterials[this.Type] -= 2;
                         this.Repo.Materials[this.Type]++;
                         this.TimerValue = 0;
                         console.log('Done');

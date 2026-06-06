@@ -1,6 +1,6 @@
-import type { MineIF } from "../Types/MineIF";
-import { Button } from "./Button";
-import type { Game } from "./Game";
+import type { MineIF } from "../Types/MineIF.ts";
+import { Button } from "./Button.ts";
+import type { Game } from "./Game.ts";
 
 export class Mine {
     private Repo: Game;

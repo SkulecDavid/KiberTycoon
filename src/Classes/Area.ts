@@ -124,10 +124,10 @@ export class Area {
     }
 
     newRefine(type: number){
-        if (confirm(`Akarsz egy feldolgozót építeni (${this.BuildingPrices[0+type]} KR)?`)) {
-            if (this.Repo.Credit >= this.BuildingPrices[1+type]) {
+        if (confirm(`Akarsz egy feldolgozót építeni (${this.BuildingPrices[1+type]} alapanyag)?`)) {
+            if (this.Repo.Material >= this.BuildingPrices[1+type]) {
                 this.Status = 'used';
-                this.Repo.Credit -= this.BuildingPrices[0+type];
+                this.Repo.Material -= this.BuildingPrices[0+type];
                 this.Build = new RefineBuild(this.Repo, this.Position, 0+type);
             }
         } else {

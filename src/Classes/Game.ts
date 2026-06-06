@@ -7,7 +7,7 @@ import type { MenuType } from "../Types/MenuType.ts";
 import type { Terra } from "../Types/Terra.ts";
 import { Area } from "./Area.ts";
 import { Mine } from "./Mine.ts";
-import { Building } from "./Building/Building.ts";
+import { Market } from "./Market.ts";
 
 
 export class Game{
@@ -56,6 +56,7 @@ export class Game{
     //private Build: Building;
 
     public Mines: Mine[];
+    private MarketMenu: Market;
 
     public BuildAreas: Area[][];
     public Technologies: Boolean[] = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
@@ -113,12 +114,13 @@ export class Game{
         this.Mines = new Array();
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 2; j++) {
-                this.Mines.push(new Mine(this, {type: i, number: j, price: 200*(2**(i)), upgrade: (200*(2**(i)))/2, speed: 64-(16*i), material:(i+1)*2, tech:(i+1)*4}));
+                this.Mines.push(new Mine(this, {type: i, number: j, price: 200*(2**(i)), upgrade: (200*(2**(i)))/2, speed: 64-(16*i), material:(i+1)*4, tech:(i+1)*2}));
                 if (i == 0) {
                     this.Mines[j].IsAvailable = true;
                 }
             }
         }
+        this.MarketMenu = new Market(this)
 
         this.BuildAreas = new Array(4);
         for (let row = 0; row < 4; row++) {
@@ -159,6 +161,9 @@ export class Game{
                     mine.update();
                 });
             }
+            if (this.CurrentMenu == 'market') {
+                this.MarketMenu.update();
+            }
             this.BackBtn.update();
         }
     }
@@ -188,6 +193,10 @@ export class Game{
                     mine.draw();
                 });
             }
+            if (this.CurrentMenu == 'market') {
+                this.MarketMenu.draw();
+            }
+            this
             this.BackBtn.draw();
         }
     }
