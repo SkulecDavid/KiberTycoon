@@ -45,14 +45,13 @@ export class Building{
     }
 
     draw(){
-        const ctx = this.Repo.Ctx;
-        ctx.fillStyle = this.Color;
-        ctx.fillRect(this.X, this.Y, this.Size, this.Size)
-
         if (this.Buttons){
             this.Buttons.forEach(btn => {
                 btn.draw();
             });
         }
+        const ctx = this.Repo.Ctx;
+        ctx.fillStyle = this.Color;
+        ctx.fillRect(this.X, this.Y, this.Size, this.Size);
     }
 }

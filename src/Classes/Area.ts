@@ -1,5 +1,6 @@
 import type { HEXColor } from "../Types/Color.ts";
 import { Building } from "./Building/Building.ts";
+import { FactoryBuild } from "./Building/FactoryBuild.ts";
 import { RefineBuild } from "./Building/RefineBuild.ts";
 import { StorageBuild } from "./Building/StorageBuild.ts";
 import { Button } from "./Button.ts";
@@ -15,8 +16,10 @@ export class Area {
     public Status: 'locked' | 'empty' | 'used' = 'locked';
     public Build?: Building;
     private Buttons?: Button[] = undefined
-    private BuildingPrices: number[] = [25, 100, 150, 250, 500, 200, 350, 550, 800, 30, 60, 90, 120]
+    private BuildingPrices: number[] = [50, 100, 150, 250, 500, 200, 350, 550, 800, 30, 60, 90, 120]
         // 0-storage 1-4-refinery 5-8-factory 9-12-terraform
+    private UnlockNumbers: number[] = [0, 5, 10, 1, 6, 11, 15, 3, 8, 12, 17];
+        // 0-2-refinery 3-6-factory 7-10-terraform
 
     constructor(repo: Game, position: [number, number]){
         this.Repo = repo;
@@ -94,7 +97,7 @@ export class Area {
                     this.Buttons = new Array();
                     this.Buttons.push(new Button(this.Repo, '#d69f3d', 'Rakt.', this.X, this.Y, this.Size/2, this.Size/2, ()=>{this.storageBtn()}));
                     this.Buttons.push(new Button(this.Repo, '#d76b3c', 'Feld.', this.X+this.Size/2, this.Y, this.Size/2, this.Size/2, ()=>{this.refineryBtn()}));
-                    this.Buttons.push(new Button(this.Repo, '#b93f3f', 'Gyár', this.X, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{console.log('gyar')}));
+                    this.Buttons.push(new Button(this.Repo, '#b93f3f', 'Gyár', this.X, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{this.factoryBtn()}));
                     this.Buttons.push(new Button(this.Repo, '#5a9e4e', 'Terr.', this.X+this.Size/2, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{console.log('terra')}));
                 } else {
                     this.Buttons = undefined;
@@ -103,10 +106,10 @@ export class Area {
     }
 
     storageBtn(){
-        if (confirm(`Akarsz egy raktárat építeni (${this.BuildingPrices[0]} KR)?`)) {
-            if (this.Repo.Credit >= this.BuildingPrices[0]) {
+        if (confirm(`Akarsz egy raktárat építeni (${this.BuildingPrices[0]} alapanyag)?`)) {
+            if (this.Repo.Material >= this.BuildingPrices[0]) {
                 this.Status = 'used';
-                this.Repo.Credit -= this.BuildingPrices[0];
+                this.Repo.Material -= this.BuildingPrices[0];
                 this.Build = new StorageBuild(this.Repo, this.Position);
             }
         } else {
@@ -115,23 +118,44 @@ export class Area {
     }
 
     refineryBtn(){
-        //this.Buttons = undefined;
         this.Buttons = new Array();
         this.Buttons.push(new Button(this.Repo, '#d76b3c', 'Szén', this.X, this.Y, this.Size/2, this.Size/2, ()=>{this.newRefine(0)}));
         this.Buttons.push(new Button(this.Repo, '#d76b3c', 'Réz', this.X+this.Size/2, this.Y, this.Size/2, this.Size/2, ()=>{this.newRefine(1)}));
         this.Buttons.push(new Button(this.Repo, '#d76b3c', 'Vas', this.X, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{this.newRefine(2)}));
-        this.Buttons.push(new Button(this.Repo, '#d76b3c', 'Arany', this.X+this.Size/2, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{this.newRefine(4)}));
+        this.Buttons.push(new Button(this.Repo, '#d76b3c', 'Arany', this.X+this.Size/2, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{this.newRefine(3)}));
     }
 
     newRefine(type: number){
-        if (confirm(`Akarsz egy feldolgozót építeni (${this.BuildingPrices[1+type]} alapanyag)?`)) {
+        if ((type == 0 || this.Repo.Technologies[this.UnlockNumbers[type-1]]) &&
+            confirm(`Akarsz egy feldolgozót építeni (${this.BuildingPrices[1+type]} alapanyag)?`)) {
             if (this.Repo.Material >= this.BuildingPrices[1+type]) {
                 this.Status = 'used';
-                this.Repo.Material -= this.BuildingPrices[0+type];
+                this.Repo.Material -= this.BuildingPrices[1+type];
                 this.Build = new RefineBuild(this.Repo, this.Position, 0+type);
             }
         } else {
-            this.Buttons = undefined
+            this.Buttons = undefined;
+        }
+    }
+
+    factoryBtn(){
+        this.Buttons = new Array();
+        this.Buttons.push(new Button(this.Repo, '#b93f3f', 'Kábel', this.X, this.Y, this.Size/2, this.Size/2, ()=>{this.newFactory(0)}));
+        this.Buttons.push(new Button(this.Repo, '#b93f3f', 'Acél', this.X+this.Size/2, this.Y, this.Size/2, this.Size/2, ()=>{this.newFactory(1)}));
+        this.Buttons.push(new Button(this.Repo, '#b93f3f', 'Chip', this.X, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{this.newFactory(2)}));
+        this.Buttons.push(new Button(this.Repo, '#b93f3f', 'Elektro', this.X+this.Size/2, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{this.newFactory(3)}));
+    }
+
+    newFactory(type: number){
+        if (this.Repo.Technologies[this.UnlockNumbers[type+4-1]] &&
+            confirm(`Akarsz egy gyárat építeni (${this.BuildingPrices[5+type]} alapanyag)?`)) {
+            if (this.Repo.Material >= this.BuildingPrices[5+type]) {
+                this.Status = 'used';
+                this.Repo.Material -= this.BuildingPrices[5+type];
+                this.Build = new FactoryBuild(this.Repo, this.Position, 0+type);
+            }
+        } else {
+            this.Buttons = undefined;
         }
     }
 }

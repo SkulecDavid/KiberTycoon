@@ -3,7 +3,7 @@ import type { Game } from "../Game.ts";
 import { Building } from "./Building.ts";
 
 export class StorageBuild extends Building {
-    private Cap: number = 250; // DEFAULT 250
+    private Cap: number = 50; // DEFAULT 50
     private RawMaterials: number[] = [0, 0, 0, 0];
     private Materials: number[] = [0, 0, 0, 0];
     private Items: number[] = [0, 0, 0, 0];
@@ -11,7 +11,7 @@ export class StorageBuild extends Building {
     constructor(repo: Game, position: [number, number]){
         super(repo, position, ()=>this.actions());
         this.Color = '#d69f3d';
-        this.UpgradePrice = 25;
+        this.UpgradePrice = 50;
         this.MaxLevel = 3;
 
         const techs = this.Repo.Technologies;
@@ -19,11 +19,9 @@ export class StorageBuild extends Building {
             this.TechUnlocked++;
             if (techs[7]) {
                 this.TechUnlocked++;
-                if (techs[12]) {
-                    this.TechUnlocked++;
-                }
-            }
-        }
+            if (techs[12]) {
+                this.TechUnlocked++;
+        }}}
 
         this.Repo.FullCap += this.Cap;
     }
@@ -37,7 +35,8 @@ export class StorageBuild extends Building {
     }
 
     upgrade(){
-        if (this.Level < this.MaxLevel && confirm(`Akarod ezt a raktárat fejleszteni ${this.Level+2}-re/-ra (${this.UpgradePrice} KR)?`)) {
+        if (this.Level < this.MaxLevel && this.Level < this.TechUnlocked &&
+            confirm(`Akarod ezt a raktárat fejleszteni ${this.Level+2}-re/-ra (${this.UpgradePrice} KR)?`) ) {
             if (this.Repo.Credit >= this.UpgradePrice) {
                 this.Level++;
                 this.Repo.Credit -= this.UpgradePrice;

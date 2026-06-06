@@ -18,7 +18,13 @@ export class RefineBuild extends Building {
         const techs = this.Repo.Technologies;
         if (techs[2]){
             this.TechUnlocked++;
-        }
+            if (techs[7]){
+                this.TechUnlocked++;
+            if (techs[12]){
+                this.TechUnlocked++;
+            if (techs[16]){
+                this.TechUnlocked++;
+        }}}}
     }
 
     actions(){
@@ -51,10 +57,11 @@ export class RefineBuild extends Building {
     }
 
     upgrade(){
-        if (this.Level < this.MaxLevel && confirm(`Akarod ezt a feldolgozót fejleszteni ${this.Level+2}-re/-ra (${this.UpgradePrice} KR)?`)) {
-            if (this.Repo.Credit >= this.UpgradePrice) {
+        if (this.Level < this.MaxLevel && this.Level+this.Type < this.TechUnlocked &&
+            confirm(`Akarod ezt a feldolgozót fejleszteni ${this.Level+2}-re/-ra (${this.UpgradePrice} alapanyag)?`)) {
+            if (this.Repo.Material >= this.UpgradePrice) {
                 this.Level++;
-                this.Repo.Credit -= this.UpgradePrice;
+                this.Repo.Material -= this.UpgradePrice;
                 this.Buttons = undefined
             }
         }

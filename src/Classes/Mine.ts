@@ -6,12 +6,13 @@ export class Mine {
     private Repo: Game;
     public Stats: MineIF;
     public Level: 0 | 1 | 2 = 0; // DEFAULT 0
-    public IsAvailable: boolean = false; // DEFAULT false
     private Cap: number = 20;
     public Load: number = 0;
     private Materials: string[] = ['Szén', 'Réz', 'Vas', 'Arany'];
     public TimerStop: number;
     private TimerValue: number = 0;
+    private UnlockNumbers: number[] = [0, 5, 10];
+    private UpgradeNumbers: number[] = [2, 7, 12, 16];
     private BuyBtn?: Button;
     private UpgradeBtn?: Button;
     private CollectBtn?: Button;
@@ -54,7 +55,7 @@ export class Mine {
         const x = this.avg(this.Repo.SmallDivX+this.Repo.QuarterWidth*this.Stats.type, this.Repo.SmallDivX+this.Repo.QuarterWidth*this.Stats.type+this.Repo.SmallDivWidth-this.Repo.SmallBtnWidth);
         const y = this.avg(this.Repo.SmallDivY+this.Repo.SmallDivHeight*this.Stats.number, this.Repo.SmallDivY+this.Repo.SmallDivHeight*this.Stats.number+this.Repo.SmallDivHeight-this.Repo.SmallBtnHeight);
 
-        if (this.IsAvailable) {
+        if (this.Stats.type == 0 || this.Repo.Technologies[this.UnlockNumbers[this.Stats.type-1]]) {
             const width = this.Repo.SmallBtnWidth;
             const height = this.Repo.SmallBtnHeight;
             const btnOffset = this.Repo.SmallBtnHeight/2+(this.Repo.SmallDivWidth-this.Repo.SmallBtnWidth)/2;
@@ -89,12 +90,12 @@ export class Mine {
     }
 
     upgradeMine(){
-        if (this.Repo.Credit >= this.Stats.upgrade) {
+        if (this.Repo.Credit >= this.Stats.upgrade && this.Repo.Technologies[this.UpgradeNumbers[this.Stats.type+3]]) {
             this.Repo.Credit -= this.Stats.upgrade;
             this.Level = 2;
             this.Stats.material *= 1.5;
             this.Stats.tech *= 1.5;
-            this.Stats.speed *= 1.5;
+            this.TimerStop = Math.round(60/this.Stats.speed*1.5*60*2);
         }
     }
 

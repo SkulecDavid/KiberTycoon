@@ -61,8 +61,8 @@ export class Game{
     public BuildAreas: Area[][];
     public Technologies: Boolean[] = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
 
-    public Credit: number = 225; // DEFAULT 225
-    public Material: number = 0; // DEFAULT 0
+    public Credit: number = 22555; // DEFAULT 200
+    public Material: number = 555550; // DEFAULT 50
     public TechPoint: number = 0;
     public TerraLvl: Terra = 0;
 
@@ -107,7 +107,6 @@ export class Game{
         this.MenuBg = new Menu(this);
 
         /*this.MineMenu = new Mine(this, {type: 1, number: 0, price: 200, upgrade: 100, speed: 64})
-        this.MineMenu.IsAvailable = true;
         this.MineMenu.Level = 1;*/
         //this.Build = new Building(this, [0,0], ()=>{console.log('ok')})
         
@@ -115,9 +114,6 @@ export class Game{
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 2; j++) {
                 this.Mines.push(new Mine(this, {type: i, number: j, price: 200*(2**(i)), upgrade: (200*(2**(i)))/2, speed: 64-(16*i), material:(i+1)*4, tech:(i+1)*2}));
-                if (i == 0) {
-                    this.Mines[j].IsAvailable = true;
-                }
             }
         }
         this.MarketMenu = new Market(this)
@@ -133,6 +129,10 @@ export class Game{
             for (let col = 1; col < 4; col++) {
                 this.BuildAreas[row][col].Status = 'empty';
             }
+        }
+
+        for (let i = 0; i < this.Technologies.length; i++) {
+            this.Technologies[i] = true;
         }
     }
 
@@ -157,7 +157,6 @@ export class Game{
             if (this.CurrentMenu == 'mine') {
                 //this.MineMenu.update();
                 this.Mines.forEach(mine => {
-                    //mine.IsAvailable = true;
                     mine.update();
                 });
             }
