@@ -26,6 +26,12 @@ export class Building{
     }
 
     update(){
+        if (this.Buttons){
+            this.Buttons.forEach(btn => {
+                btn.update();
+            });
+        }
+
         const mx = this.Repo.MouseX;
         const my = this.Repo.MouseY;
         if (this.Repo.MouseDown) {
@@ -35,12 +41,6 @@ export class Building{
             } else {
                 this.Buttons = undefined;
             }
-        }
-
-        if (this.Buttons){
-            this.Buttons.forEach(btn => {
-                btn.update();
-            });
         }
     }
 

@@ -119,9 +119,6 @@ export class Game{
                 }
             }
         }
-        console.log(this.Mines);
-        
-        
 
         this.BuildAreas = new Array(4);
         for (let row = 0; row < 4; row++) {
@@ -161,8 +158,6 @@ export class Game{
                     //mine.IsAvailable = true;
                     mine.update();
                 });
-                console.log(this.FullCap);
-                
             }
             this.BackBtn.update();
         }
@@ -199,8 +194,8 @@ export class Game{
 
     loop(){
         this.Ctx.clearRect(0, 0, this.CanvasWidth, this.CanvasHeight);
-        this.update();
         this.draw();
+        this.update();
         this.MouseDown = false;
         requestAnimationFrame(() => this.loop());
     }

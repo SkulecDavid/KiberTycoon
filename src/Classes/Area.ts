@@ -1,5 +1,5 @@
 import type { HEXColor } from "../Types/Color.ts";
-import type { Building } from "./Building/Building.ts";
+import { Building } from "./Building/Building.ts";
 import { RefineBuild } from "./Building/RefineBuild.ts";
 import { StorageBuild } from "./Building/StorageBuild.ts";
 import { Button } from "./Button.ts";
@@ -27,11 +27,29 @@ export class Area {
     }
 
     update(){
+        if (this.Buttons) {
+            this.Buttons.forEach(btn => {
+                btn.update();
+            });
+        }
+
         if (this.Status == 'empty'){
-            this.buyBuilding();
+            const mx = this.Repo.MouseX;
+            const my = this.Repo.MouseY;
+            if (this.Repo.MouseDown) {
+                if (mx > this.X && mx < this.X+this.Size &&
+                    my > this.Y && my < this.Y+this.Size) {
+                    if (!this.Buttons) {
+                        this.buyBuilding();
+                    }
+                } else {
+                    this.Buttons = undefined;
+                }
+            }
         } else {
             this.Buttons = undefined
         }
+
 
         if (this.Build) {
             this.Build.update();
@@ -68,26 +86,20 @@ export class Area {
     }
 
     buyBuilding(){
-        if (this.Buttons) {
-            this.Buttons.forEach(btn => {
-                btn.update();
-            });
-        }
-
         const mx = this.Repo.MouseX;
-        const my = this.Repo.MouseY;
-        if (this.Repo.MouseDown) {
-            if (mx > this.X && mx < this.X+this.Size &&
-                my > this.Y && my < this.Y+this.Size) {
-                this.Buttons = new Array();
-                this.Buttons.push(new Button(this.Repo, '#d69f3d', 'Rakt.', this.X, this.Y, this.Size/2, this.Size/2, ()=>{this.storageBtn()}));
-                this.Buttons.push(new Button(this.Repo, '#d76b3c', 'Feld.', this.X+this.Size/2, this.Y, this.Size/2, this.Size/2, ()=>{this.refineryBtn()}));
-                //this.Buttons.push(new Button(this.Repo, '#b93f3f', 'Gyár', this.X, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{console.log('gyar')}));
-                //this.Buttons.push(new Button(this.Repo, '#5a9e4e', 'Terr.', this.X+this.Size/2, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{console.log('terra')}));
-            } else {
-                this.Buttons = undefined;
+            const my = this.Repo.MouseY;
+            if (this.Repo.MouseDown) {
+                if (mx > this.X && mx < this.X+this.Size &&
+                    my > this.Y && my < this.Y+this.Size) {
+                    this.Buttons = new Array();
+                    this.Buttons.push(new Button(this.Repo, '#d69f3d', 'Rakt.', this.X, this.Y, this.Size/2, this.Size/2, ()=>{this.storageBtn()}));
+                    this.Buttons.push(new Button(this.Repo, '#d76b3c', 'Feld.', this.X+this.Size/2, this.Y, this.Size/2, this.Size/2, ()=>{this.refineryBtn()}));
+                    this.Buttons.push(new Button(this.Repo, '#b93f3f', 'Gyár', this.X, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{console.log('gyar')}));
+                    this.Buttons.push(new Button(this.Repo, '#5a9e4e', 'Terr.', this.X+this.Size/2, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{console.log('terra')}));
+                } else {
+                    this.Buttons = undefined;
+                }
             }
-        }
     }
 
     storageBtn(){
@@ -97,11 +109,13 @@ export class Area {
                 this.Repo.Credit -= this.BuildingPrices[0];
                 this.Build = new StorageBuild(this.Repo, this.Position);
             }
+        } else {
+            this.Buttons = undefined;
         }
     }
 
     refineryBtn(){
-        this.Buttons = undefined;
+        //this.Buttons = undefined;
         this.Buttons = new Array();
         this.Buttons.push(new Button(this.Repo, '#d76b3c', 'Szén', this.X, this.Y, this.Size/2, this.Size/2, ()=>{this.newRefine(0)}));
         this.Buttons.push(new Button(this.Repo, '#d76b3c', 'Réz', this.X+this.Size/2, this.Y, this.Size/2, this.Size/2, ()=>{this.newRefine(1)}));
@@ -116,6 +130,8 @@ export class Area {
                 this.Repo.Credit -= this.BuildingPrices[0+type];
                 this.Build = new RefineBuild(this.Repo, this.Position, 0+type);
             }
+        } else {
+            this.Buttons = undefined
         }
     }
 }
