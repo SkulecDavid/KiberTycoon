@@ -1,4 +1,4 @@
-import { Button } from "../Button.ts";
+import { Button } from "../UI/Button.ts";
 import type { Game } from "../Game.ts";
 import { Building } from "./Building.ts";
 

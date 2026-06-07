@@ -1,11 +1,11 @@
-import type { HEXColor } from "../Types/Color.ts";
-import { Building } from "./Building/Building.ts";
-import { FactoryBuild } from "./Building/FactoryBuild.ts";
-import { RefineBuild } from "./Building/RefineBuild.ts";
-import { StorageBuild } from "./Building/StorageBuild.ts";
-import { TerraBuild } from "./Building/TerraBuild.ts";
+import type { HEXColor } from "../../Types/Color.ts";
+import { Building } from "../Building/Building.ts";
+import { FactoryBuild } from "../Building/FactoryBuild.ts";
+import { RefineBuild } from "../Building/RefineBuild.ts";
+import { StorageBuild } from "../Building/StorageBuild.ts";
+import { TerraBuild } from "../Building/TerraBuild.ts";
 import { Button } from "./Button.ts";
-import type { Game } from "./Game.ts";
+import type { Game } from "../Game.ts";
 
 export class Area {
     private Repo: Game;

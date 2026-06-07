@@ -1,13 +1,13 @@
-import { UI } from "./UI.ts";
-import { Button } from "./Button.ts";
-import { BG } from "./BG.ts";
-import { Menu } from "./Menu.ts";
+import { UI } from "./UI/UI.ts";
+import { Button } from "./UI/Button.ts";
+import { BG } from "./UI/BG.ts";
+import { Menu } from "./Menu/Menu.ts";
 import type { HEXColor } from "../Types/Color.ts";
 import type { MenuType } from "../Types/MenuType.ts";
 import type { Terra } from "../Types/Terra.ts";
-import { Area } from "./Area.ts";
-import { Mine } from "./Mine.ts";
-import { Market } from "./Market.ts";
+import { Area } from "./UI/Area.ts";
+import { Mine } from "./Menu/Mine.ts";
+import { Market } from "./Menu/Market.ts";
 
 
 export class Game{

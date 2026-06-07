@@ -1,5 +1,5 @@
-import { Button } from "./Button";
-import type { Game } from "./Game";
+import { Button } from "../UI/Button";
+import type { Game } from "../Game";
 
 export class Market {
     private Repo: Game;

@@ -1,4 +1,4 @@
-import type { Game } from "./Game.ts";
+import type { Game } from "../Game.ts";
 
 export class BG{
     private Repo: Game

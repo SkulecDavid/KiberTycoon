@@ -1,5 +1,5 @@
 import type { HEXColor } from "../../Types/Color.ts";
-import type { Button } from "../Button.ts";
+import type { Button } from "../UI/Button.ts";
 import type { Game } from "../Game.ts";
 
 export class Building{
