@@ -52,9 +52,6 @@ export class Game{
     private MenuBg: Menu;
     public CurrentMenu: MenuType = 'main';
 
-    //private MineMenu: Mine;
-    //private Build: Building;
-
     public Mines: Mine[];
     private MarketMenu: Market;
 
@@ -64,6 +61,7 @@ export class Game{
     public Credit: number = 22555; // DEFAULT 200
     public Material: number = 555550; // DEFAULT 50
     public TechPoint: number = 0;
+    public TerraPoint: number = 0;
     public TerraLvl: Terra = 0;
 
     public FullCap: number = 0;
@@ -105,10 +103,6 @@ export class Game{
         this.MainUi = new UI(this);
         this.MainBg = new BG(this, 'mars-img');
         this.MenuBg = new Menu(this);
-
-        /*this.MineMenu = new Mine(this, {type: 1, number: 0, price: 200, upgrade: 100, speed: 64})
-        this.MineMenu.Level = 1;*/
-        //this.Build = new Building(this, [0,0], ()=>{console.log('ok')})
         
         this.Mines = new Array();
         for (let i = 0; i < 4; i++) {
@@ -131,7 +125,7 @@ export class Game{
             }
         }
 
-        for (let i = 0; i < this.Technologies.length; i++) {
+        for (let i = 0; i < this.Technologies.length; i++) { // DEBUG
             this.Technologies[i] = true;
         }
     }
@@ -152,10 +146,8 @@ export class Game{
                 }
             }
 
-            //this.Build.update();
         } else {
             if (this.CurrentMenu == 'mine') {
-                //this.MineMenu.update();
                 this.Mines.forEach(mine => {
                     mine.update();
                 });
@@ -184,10 +176,8 @@ export class Game{
                 }
             }
 
-            //this.Build.draw();
         } else {
             if (this.CurrentMenu == 'mine') {
-                //this.MineMenu.draw();
                 this.Mines.forEach(mine => {
                     mine.draw();
                 });

@@ -3,6 +3,7 @@ import { Building } from "./Building/Building.ts";
 import { FactoryBuild } from "./Building/FactoryBuild.ts";
 import { RefineBuild } from "./Building/RefineBuild.ts";
 import { StorageBuild } from "./Building/StorageBuild.ts";
+import { TerraBuild } from "./Building/TerraBuild.ts";
 import { Button } from "./Button.ts";
 import type { Game } from "./Game.ts";
 
@@ -20,6 +21,7 @@ export class Area {
         // 0-storage 1-4-refinery 5-8-factory 9-12-terraform
     private UnlockNumbers: number[] = [0, 5, 10, 1, 6, 11, 15, 3, 8, 12, 17];
         // 0-2-refinery 3-6-factory 7-10-terraform
+    public TerraNames: string[] = ['oxigéntartályt', 'üvegházat', 'légkörjavítót', 'állatfarmot'];
 
     constructor(repo: Game, position: [number, number]){
         this.Repo = repo;
@@ -98,7 +100,7 @@ export class Area {
                     this.Buttons.push(new Button(this.Repo, '#d69f3d', 'Rakt.', this.X, this.Y, this.Size/2, this.Size/2, ()=>{this.storageBtn()}));
                     this.Buttons.push(new Button(this.Repo, '#d76b3c', 'Feld.', this.X+this.Size/2, this.Y, this.Size/2, this.Size/2, ()=>{this.refineryBtn()}));
                     this.Buttons.push(new Button(this.Repo, '#b93f3f', 'Gyár', this.X, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{this.factoryBtn()}));
-                    this.Buttons.push(new Button(this.Repo, '#5a9e4e', 'Terr.', this.X+this.Size/2, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{console.log('terra')}));
+                    this.Buttons.push(new Button(this.Repo, '#5a9e4e', 'Terr.', this.X+this.Size/2, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{this.terraBtn()}));
                 } else {
                     this.Buttons = undefined;
                 }
@@ -131,7 +133,7 @@ export class Area {
             if (this.Repo.Material >= this.BuildingPrices[1+type]) {
                 this.Status = 'used';
                 this.Repo.Material -= this.BuildingPrices[1+type];
-                this.Build = new RefineBuild(this.Repo, this.Position, 0+type);
+                this.Build = new RefineBuild(this.Repo, this.Position, type);
             }
         } else {
             this.Buttons = undefined;
@@ -147,12 +149,33 @@ export class Area {
     }
 
     newFactory(type: number){
-        if (this.Repo.Technologies[this.UnlockNumbers[type+4-1]] &&
+        if (this.Repo.Technologies[this.UnlockNumbers[type+3-1]] &&
             confirm(`Akarsz egy gyárat építeni (${this.BuildingPrices[5+type]} alapanyag)?`)) {
             if (this.Repo.Material >= this.BuildingPrices[5+type]) {
                 this.Status = 'used';
                 this.Repo.Material -= this.BuildingPrices[5+type];
-                this.Build = new FactoryBuild(this.Repo, this.Position, 0+type);
+                this.Build = new FactoryBuild(this.Repo, this.Position, type);
+            }
+        } else {
+            this.Buttons = undefined;
+        }
+    }
+
+    terraBtn(){
+        this.Buttons = new Array();
+        this.Buttons.push(new Button(this.Repo, '#5a9e4e', 'O2', this.X, this.Y, this.Size/2, this.Size/2, ()=>{this.newTerra(0)}));
+        this.Buttons.push(new Button(this.Repo, '#5a9e4e', 'Üvegh.', this.X+this.Size/2, this.Y, this.Size/2, this.Size/2, ()=>{this.newTerra(1)}));
+        this.Buttons.push(new Button(this.Repo, '#5a9e4e', 'Légk.', this.X, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{this.newTerra(2)}));
+        this.Buttons.push(new Button(this.Repo, '#5a9e4e', 'Állat', this.X+this.Size/2, this.Y+this.Size/2, this.Size/2, this.Size/2, ()=>{this.newTerra(3)}));
+    }
+
+    newTerra(type: number){
+        if (this.Repo.Technologies[this.UnlockNumbers[type+7-1]] &&
+            confirm(`Akarsz egy ${this.TerraNames[type]} építeni (${this.BuildingPrices[9+type]} alapanyag)?`)) {
+            if (this.Repo.Material >= this.BuildingPrices[9+type]) {
+                this.Status = 'used';
+                this.Repo.Material -= this.BuildingPrices[9+type];
+                this.Build = new TerraBuild(this.Repo, this.Position, type);
             }
         } else {
             this.Buttons = undefined;
