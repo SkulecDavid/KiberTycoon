@@ -37,9 +37,11 @@ export class StorageBuild extends Building {
     upgrade(){
         if (this.Level < this.MaxLevel && this.Level < this.TechUnlocked &&
             confirm(`Akarod ezt a raktárat fejleszteni ${this.Level+2}-re/-ra (${this.UpgradePrice} KR)?`) ) {
-            if (this.Repo.Credit >= this.UpgradePrice) {
+            if (this.Repo.Material >= this.UpgradePrice) {
                 this.Level++;
-                this.Repo.Credit -= this.UpgradePrice;
+                this.Repo.UpgradedBuildings++;
+                this.Repo.SpentMaterials += this.UpgradePrice;
+                this.Repo.Material -= this.UpgradePrice;
                 this.Cap *= 2;
                 this.UpgradePrice *= 2;
                 this.Repo.FullCap += this.Cap - this.Cap/2;
@@ -60,6 +62,8 @@ export class StorageBuild extends Building {
                 this.Repo.Items[i] -= this.Items[i];
             }
             this.Repo.FullCap -= this.Cap;
+            this.Repo.UpgradedBuildings -= this.Level;
+            this.Repo.BuiltBuildings--;
             this.Repo.BuildAreas[this.Position[0]][this.Position[1]].Status = 'empty';
             this.Repo.BuildAreas[this.Position[0]][this.Position[1]].Build = undefined;
         }

@@ -61,6 +61,8 @@ export class RefineBuild extends Building {
             confirm(`Akarod ezt a feldolgozót fejleszteni ${this.Level+2}-re/-ra (${this.UpgradePrice} alapanyag)?`)) {
             if (this.Repo.Material >= this.UpgradePrice) {
                 this.Level++;
+                this.Repo.UpgradedBuildings++;
+                this.Repo.SpentMaterials += this.UpgradePrice;
                 this.Repo.Material -= this.UpgradePrice;
                 this.Buttons = undefined
             }
@@ -69,6 +71,8 @@ export class RefineBuild extends Building {
 
     delete(){
         if (confirm(`Biztosan ki akarod törölni ezt a feldolgozót?`)) {
+            this.Repo.UpgradedBuildings -= this.Level;
+            this.Repo.BuiltBuildings--;
             this.Repo.BuildAreas[this.Position[0]][this.Position[1]].Status = 'empty';
             this.Repo.BuildAreas[this.Position[0]][this.Position[1]].Build = undefined;
         }

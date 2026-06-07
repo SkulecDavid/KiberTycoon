@@ -39,9 +39,11 @@ export class TerraBuild extends Building {
             confirm(`Akarod ezt a(z) ${this.Repo.BuildAreas[0][0].TerraNames[this.Type]} fejleszteni ${this.Level+2}-re/-ra (${this.UpgradePrice} alapanyag)?`)) {
             if (this.Repo.Material >= this.UpgradePrice) {
                 this.Level++;
+                this.Repo.UpgradedBuildings++;
                 this.Repo.TerraPoint -= this.TerraPoint;
                 this.TerraPoint *= 2;
                 this.Repo.TerraPoint += this.TerraPoint;
+                this.Repo.SpentMaterials += this.UpgradePrice;
                 this.Repo.Material -= this.UpgradePrice;
                 this.Buttons = undefined
             }
@@ -51,6 +53,8 @@ export class TerraBuild extends Building {
     delete(){
         if (confirm(`Biztosan ki akarod törölni ezt a(z) ${this.Repo.BuildAreas[0][0].TerraNames[this.Type]}?`)) {
             this.Repo.TerraPoint -= this.TerraPoint;
+            this.Repo.UpgradedBuildings -= this.Level;
+            this.Repo.BuiltBuildings--;
             this.Repo.BuildAreas[this.Position[0]][this.Position[1]].Status = 'empty';
             this.Repo.BuildAreas[this.Position[0]][this.Position[1]].Build = undefined;
         }

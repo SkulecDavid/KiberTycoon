@@ -50,11 +50,13 @@ export class Market {
         if (row == 0){
             if (this.Repo.Materials[col] > 0){
             this.Repo.Materials[col]--;
+            this.Repo.EarnedCredits += this.Prices[col];
             this.Repo.Credit += this.Prices[col];
             }
         } else {
             if (this.Repo.Items[col] > 0){
             this.Repo.Items[col]--;
+            this.Repo.EarnedCredits += this.Prices[col+4];
             this.Repo.Credit += this.Prices[col+4];
             }
         }

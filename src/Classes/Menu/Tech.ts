@@ -68,8 +68,11 @@ export class Tech {
                     this.Repo.TerraLvl++;
                 }
             }
+            this.Repo.SpentMaterials += this.Stats.materials;
             this.Repo.Material -= this.Stats.materials;
+            this.Repo.SpentTechPoints += this.Stats.techPoints;
             this.Repo.TechPoint -= this.Stats.techPoints;
+            this.Repo.BoughtTechs++;
             this.Repo.Technologies[this.Stats.number] = true;
             if (this.Stats.number < this.Repo.Techs.length-1) {
                 this.Repo.Techs[this.Stats.number+1].IsAvailable = true;

@@ -9,6 +9,7 @@ import { Area } from "./UI/Area.ts";
 import { Mine } from "./Menu/Mine.ts";
 import { Market } from "./Menu/Market.ts";
 import { Tech } from "./Menu/Tech.ts";
+import { Stat } from "./Menu/Stat.ts";
 
 
 export class Game{
@@ -61,20 +62,45 @@ export class Game{
     public Mines: Mine[];
     private MarketMenu: Market;
     public Techs: Tech[];
+    private Stats: Stat;
 
     public BuildAreas: Area[][];
     public Technologies: boolean[] = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
 
-    public Credit: number = 22555; // DEFAULT 200
-    public Material: number = 555550; // DEFAULT 50
-    public TechPoint: number = 999999; // DEFAULT 0
-    public TerraPoint: number = 99999; // DEFAULT 0
+    public Credit: number = 200; // DEFAULT 200
+    public Material: number = 50; // DEFAULT 50
+    public TechPoint: number = 0; // DEFAULT 0
+    public TerraPoint: number = 0; // DEFAULT 0
     public TerraLvl: Terra = 0;
 
     public FullCap: number = 0;
     public RawMaterials: number[] = [0, 0, 0, 0];
     public Materials: number[] = [0, 0, 0, 0];
     public Items: number[] = [0, 0, 0, 0];
+
+
+    public SpentCredits: number = 0;
+    public SpentMaterials: number = 0;
+    public SpentTechPoints: number = 0;
+
+    public EarnedCredits: number = 0;
+    public EarnedMaterials: number = 0;
+    public EarnedTechPoints: number = 0;
+
+    public MinedCoal: number = 0;
+    public MinedCopper: number = 0;
+    public MinedIron: number = 0;
+    public MinedGold: number = 0;
+
+    public BuiltBuildings: number = 0;
+    public BoughtMines: number = 0;
+    public BoughtTechs: number = 0;
+    public BoughtExpansions: number = 6;
+    public UpgradedMines: number = 0;
+    public UpgradedBuildings: number = 0;
+
+    public StartTime: Date = new Date();
+    public CurrentTime: Date = new Date();
 
     constructor(canvas: HTMLCanvasElement){
         this.Canvas = canvas;
@@ -126,6 +152,7 @@ export class Game{
         for (let i = 0; i < this.Technologies.length; i++) {
             this.Techs.push(new Tech(this, {number: i, materials: 100+(i*50), techPoints: 100+(i*75), terraPoints: (i % 5 == 4 && i > 0) || i == this.Technologies.length-1 ? 100*((i+1)/5) : undefined}));
         }
+        this.Stats = new Stat(this);
 
         this.BuildAreas = new Array(4);
         for (let row = 0; row < 4; row++) {
@@ -139,13 +166,10 @@ export class Game{
                 this.BuildAreas[row][col].Status = 'empty';
             }
         }
-
-        /*for (let i = 0; i < this.Technologies.length; i++) { // DEBUG
-            this.Technologies[i] = true;
-        }*/
     }
 
     update(){
+        this.CurrentTime = new Date();
         this.MenuBg.update();
         this.MainUi.update();
         
@@ -209,6 +233,9 @@ export class Game{
                 this.Techs.forEach(tech => {
                     tech.draw();
                 });
+            }
+            if (this.CurrentMenu == 'stat') {
+                this.Stats.draw();
             }
             this.BackBtn.draw();
         }

@@ -84,7 +84,9 @@ export class Mine {
 
     buyMine(){
         if (this.Repo.Credit >= this.Stats.price) {
+            this.Repo.SpentCredits += this.Stats.price;
             this.Repo.Credit -= this.Stats.price;
+            this.Repo.BoughtMines++;
             this.Level = 1;
             this.BuyBtn = undefined;
         }
@@ -92,7 +94,9 @@ export class Mine {
 
     upgradeMine(){
         if (this.Repo.Credit >= this.Stats.upgrade && this.Repo.Technologies[this.UpgradeNumbers[this.Stats.type]]) {
+            this.Repo.SpentCredits += this.Stats.upgrade;
             this.Repo.Credit -= this.Stats.upgrade;
+            this.Repo.UpgradedMines++;
             this.Level = 2;
             this.UpgradeBtn = undefined;
             this.Stats.material *= 1.5;
@@ -105,9 +109,37 @@ export class Mine {
         const storaged = this.Repo.RawMaterials[this.Stats.type]
         if (storaged < this.Repo.FullCap) {
             if (storaged + this.Load <= this.Repo.FullCap) {
+                switch (this.Stats.type) {
+                    case 0:
+                        this.Repo.MinedCoal += this.Load;
+                        break
+                    case 1:
+                        this.Repo.MinedCopper += this.Load;
+                        break
+                    case 2:
+                        this.Repo.MinedIron += this.Load;
+                        break
+                    case 3:
+                        this.Repo.MinedGold += this.Load;
+                        break
+                }
                 this.Repo.RawMaterials[this.Stats.type] += this.Load;
                 this.Load = 0;
             } else {
+                switch (this.Stats.type) {
+                    case 0:
+                        this.Repo.MinedCoal += this.Repo.FullCap - storaged;
+                        break
+                    case 1:
+                        this.Repo.MinedCopper += this.Repo.FullCap - storaged;
+                        break
+                    case 2:
+                        this.Repo.MinedIron += this.Repo.FullCap - storaged;
+                        break
+                    case 3:
+                        this.Repo.MinedGold += this.Repo.FullCap - storaged;
+                        break
+                }
                 this.Load -= this.Repo.FullCap - storaged;
                 this.Repo.RawMaterials[this.Stats.type] = this.Repo.FullCap;
             }

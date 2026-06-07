@@ -22,6 +22,7 @@ export class Area {
     private UnlockNumbers: number[] = [0, 5, 10, 1, 6, 11, 15, 3, 8, 12, 17];
         // 0-2-refinery 3-6-factory 7-10-terraform
     public TerraNames: string[] = ['oxigéntartályt', 'üvegházat', 'légkörjavítót', 'állatfarmot'];
+    private ExpansionPrice: number = 25;
 
     constructor(repo: Game, position: [number, number]){
         this.Repo = repo;
@@ -53,6 +54,21 @@ export class Area {
             }
         } else {
             this.Buttons = undefined
+        }
+
+        if (this.Status == 'locked'){
+            const mx = this.Repo.MouseX;
+            const my = this.Repo.MouseY;
+            if (this.Repo.MouseDown) {
+                if (mx > this.X && mx < this.X+this.Size &&
+                    my > this.Y && my < this.Y+this.Size) {
+                    if (!this.Buttons) {
+                        this.buyExpansion();
+                    }
+                } else {
+                    this.Buttons = undefined;
+                }
+            }
         }
 
 
@@ -90,6 +106,17 @@ export class Area {
         }
     }
 
+    buyExpansion(){
+        if (confirm(`Akarsz itt terjeszkedni (${this.ExpansionPrice*(this.Repo.BoughtExpansions-5)} KR)?`)) {
+            if (this.Repo.Credit >= this.ExpansionPrice*(this.Repo.BoughtExpansions-5)) {
+                this.Status = 'empty';
+                this.Repo.SpentCredits += this.ExpansionPrice*(this.Repo.BoughtExpansions-5);
+                this.Repo.Credit -= this.ExpansionPrice*(this.Repo.BoughtExpansions-5);
+                this.Repo.BoughtExpansions++;
+            }
+        }
+    }
+
     buyBuilding(){
         const mx = this.Repo.MouseX;
             const my = this.Repo.MouseY;
@@ -111,7 +138,9 @@ export class Area {
         if (confirm(`Akarsz egy raktárat építeni (${this.BuildingPrices[0]} alapanyag)?`)) {
             if (this.Repo.Material >= this.BuildingPrices[0]) {
                 this.Status = 'used';
+                this.Repo.SpentMaterials += this.BuildingPrices[0];
                 this.Repo.Material -= this.BuildingPrices[0];
+                this.Repo.BuiltBuildings++;
                 this.Build = new StorageBuild(this.Repo, this.Position);
             }
         } else {
@@ -132,7 +161,9 @@ export class Area {
             confirm(`Akarsz egy feldolgozót építeni (${this.BuildingPrices[1+type]} alapanyag)?`)) {
             if (this.Repo.Material >= this.BuildingPrices[1+type]) {
                 this.Status = 'used';
+                this.Repo.SpentMaterials += this.BuildingPrices[1+type];
                 this.Repo.Material -= this.BuildingPrices[1+type];
+                this.Repo.BuiltBuildings++;
                 this.Build = new RefineBuild(this.Repo, this.Position, type);
             }
         } else {
@@ -153,7 +184,9 @@ export class Area {
             confirm(`Akarsz egy gyárat építeni (${this.BuildingPrices[5+type]} alapanyag)?`)) {
             if (this.Repo.Material >= this.BuildingPrices[5+type]) {
                 this.Status = 'used';
+                this.Repo.SpentMaterials += this.BuildingPrices[5+type];
                 this.Repo.Material -= this.BuildingPrices[5+type];
+                this.Repo.BuiltBuildings++;
                 this.Build = new FactoryBuild(this.Repo, this.Position, type);
             }
         } else {
@@ -174,7 +207,9 @@ export class Area {
             confirm(`Akarsz egy ${this.TerraNames[type]} építeni (${this.BuildingPrices[9+type]} alapanyag)?`)) {
             if (this.Repo.Material >= this.BuildingPrices[9+type]) {
                 this.Status = 'used';
+                this.Repo.SpentMaterials += this.BuildingPrices[9+type];
                 this.Repo.Material -= this.BuildingPrices[9+type];
+                this.Repo.BuiltBuildings++;
                 this.Build = new TerraBuild(this.Repo, this.Position, type);
             }
         } else {

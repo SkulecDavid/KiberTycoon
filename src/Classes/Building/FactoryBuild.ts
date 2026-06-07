@@ -53,7 +53,6 @@ export class FactoryBuild extends Building {
                             this.Repo.Materials[this.Type+1]--;
                             this.Repo.Items[this.Type]++;
                             this.TimerValue = 0;
-                            console.log('Done');
                             break;
                         } else {
                             this.TimerValue++;
@@ -75,7 +74,6 @@ export class FactoryBuild extends Building {
                             this.Repo.Materials[2]--;
                             this.Repo.Items[3]++;
                             this.TimerValue = 0;
-                            console.log('Done');
                             break;
                         } else {
                             this.TimerValue++;
@@ -91,6 +89,8 @@ export class FactoryBuild extends Building {
             confirm(`Akarod ezt a gyárat fejleszteni ${this.Level+2}-re/-ra (${this.UpgradePrice} alapanyag)?`)) {
             if (this.Repo.Material >= this.UpgradePrice) {
                 this.Level++;
+                this.Repo.UpgradedBuildings++;
+                this.Repo.SpentMaterials += this.UpgradePrice;
                 this.Repo.Material -= this.UpgradePrice;
                 this.Buttons = undefined
             }
@@ -99,6 +99,8 @@ export class FactoryBuild extends Building {
 
     delete(){
         if (confirm(`Biztosan ki akarod törölni ezt a gyárat?`)) {
+            this.Repo.UpgradedBuildings -= this.Level;
+            this.Repo.BuiltBuildings--;
             this.Repo.BuildAreas[this.Position[0]][this.Position[1]].Status = 'empty';
             this.Repo.BuildAreas[this.Position[0]][this.Position[1]].Build = undefined;
         }
