@@ -8,6 +8,7 @@ import type { Terra } from "../Types/Terra.ts";
 import { Area } from "./UI/Area.ts";
 import { Mine } from "./Menu/Mine.ts";
 import { Market } from "./Menu/Market.ts";
+import { Tech } from "./Menu/Tech.ts";
 
 
 export class Game{
@@ -19,6 +20,7 @@ export class Game{
     public LightColor: HEXColor = '#e3c09d';
     public DarkColor: HEXColor = '#451804';
     public MainBtnColor: HEXColor = '#dd6345';
+    public TechBtnColor: HEXColor = '#e39776'
     public FontSize: number = 20;
     public QuarterWidth: number;
     public OneTwelfthHeight: number;
@@ -36,6 +38,10 @@ export class Game{
     public SmallBtnHeight: number;
     public SmallBtnWidth: number;
     public BuildingSize: number;
+    public TechBtnHeight: number;
+    public TechBtnWidth: number;
+    public TechBtnX: number;
+    public TechBtnY: number;
 
     public MouseDown: boolean = false;
     public MouseX: number = 0;
@@ -54,14 +60,15 @@ export class Game{
 
     public Mines: Mine[];
     private MarketMenu: Market;
+    public Techs: Tech[];
 
     public BuildAreas: Area[][];
-    public Technologies: Boolean[] = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
+    public Technologies: boolean[] = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
 
     public Credit: number = 22555; // DEFAULT 200
     public Material: number = 555550; // DEFAULT 50
-    public TechPoint: number = 0;
-    public TerraPoint: number = 0;
+    public TechPoint: number = 999999; // DEFAULT 0
+    public TerraPoint: number = 99999; // DEFAULT 0
     public TerraLvl: Terra = 0;
 
     public FullCap: number = 0;
@@ -89,6 +96,10 @@ export class Game{
         this.SmallBtnHeight = this.MainBtnHeight*0.75;
         this.SmallBtnWidth = this.OneTwelfthHeight*3.5;
         this.BuildingSize = this.OneSixthHeight/2;
+        this.TechBtnHeight = this.OneSixthHeight*0.8;
+        this.TechBtnWidth = this.SmallDivWidth;
+        this.TechBtnX = this.SmallDivX
+        this.TechBtnY = this.OneSixthHeight;
         
         this.BtnPositionX = this.CanvasWidth-this.QuarterWidth;
         this.BtnPositionY = this.CanvasHeight-this.MainBtnHeight;
@@ -111,6 +122,10 @@ export class Game{
             }
         }
         this.MarketMenu = new Market(this)
+        this.Techs = new Array();
+        for (let i = 0; i < this.Technologies.length; i++) {
+            this.Techs.push(new Tech(this, {number: i, materials: 100+(i*50), techPoints: 100+(i*75), terraPoints: (i % 5 == 4 && i > 0) || i == this.Technologies.length-1 ? 100*((i+1)/5) : undefined}));
+        }
 
         this.BuildAreas = new Array(4);
         for (let row = 0; row < 4; row++) {
@@ -125,9 +140,9 @@ export class Game{
             }
         }
 
-        for (let i = 0; i < this.Technologies.length; i++) { // DEBUG
+        /*for (let i = 0; i < this.Technologies.length; i++) { // DEBUG
             this.Technologies[i] = true;
-        }
+        }*/
     }
 
     update(){
@@ -154,6 +169,11 @@ export class Game{
             }
             if (this.CurrentMenu == 'market') {
                 this.MarketMenu.update();
+            }
+            if (this.CurrentMenu == 'tech') {
+                this.Techs.forEach(tech => {
+                    tech.update();
+                });
             }
             this.BackBtn.update();
         }
@@ -185,7 +205,11 @@ export class Game{
             if (this.CurrentMenu == 'market') {
                 this.MarketMenu.draw();
             }
-            this
+            if (this.CurrentMenu == 'tech') {
+                this.Techs.forEach(tech => {
+                    tech.draw();
+                });
+            }
             this.BackBtn.draw();
         }
     }

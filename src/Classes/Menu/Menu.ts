@@ -100,8 +100,8 @@ export class Menu{
                     ctx.lineTo(this.avg(this.Width, this.Width*2), topY);
                     ctx.lineTo(this.avg(this.Width*2, this.Width*3), topY);
                     ctx.lineTo(this.avg(this.Width*2, this.Width*3), bottomY);
-                    ctx.lineTo(this.avg(this.Width*3, this.Width*4), bottomY-this.Repo.OneSixthHeight);
-                    ctx.lineTo(this.avg(this.Width*3, this.Width*4), topY+this.Repo.OneSixthHeight);
+                    ctx.lineTo(this.avg(this.Width*3, this.Width*4), bottomY-this.Repo.OneTwelfthHeight);
+                    ctx.lineTo(this.avg(this.Width*3, this.Width*4), topY+this.Repo.OneTwelfthHeight);
                     ctx.stroke();
 
                     for (let i = 1; i < 4; i++) {

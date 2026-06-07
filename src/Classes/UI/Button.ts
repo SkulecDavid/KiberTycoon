@@ -2,14 +2,15 @@ import type { HEXColor } from "../../Types/Color.ts";
 import { Game } from "../Game.ts";
 
 export class Button {
-    private Repo: Game;
-    private Width: number;
-    private Height: number;
-    private Color: HEXColor;
+    protected Repo: Game;
+    protected Width: number;
+    protected Height: number;
+    protected Color: HEXColor;
     public Text: string;
-    private X: number;
-    private Y: number;
-    private Event: Function;
+    protected X: number;
+    protected Y: number;
+    public TextY: number;
+    protected Event: Function;
 
     constructor(repo: Game, color: HEXColor, text: string, x: number, y: number, width: number, height: number, event: Function) {
         this.Repo = repo;
@@ -19,6 +20,7 @@ export class Button {
         this.Text = text;
         this.X = x;
         this.Y = y;
+        this.TextY = this.Y + this.Height/2+(this.Repo.FontSize/3);
         this.Event = event;
     }
 
@@ -42,6 +44,6 @@ export class Button {
         ctx.fillStyle = this.Repo.DarkColor;
         ctx.font = `${this.Repo.FontSize}px Arial`;
         ctx.textAlign = "center";
-        ctx.fillText(this.Text, this.X + this.Width/2, this.Y + this.Height/2+(this.Repo.FontSize/3), this.Width);
+        ctx.fillText(this.Text, this.X + this.Width/2, this.TextY, this.Width);
     }
 }

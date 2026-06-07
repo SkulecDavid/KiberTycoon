@@ -86,13 +86,15 @@ export class Mine {
         if (this.Repo.Credit >= this.Stats.price) {
             this.Repo.Credit -= this.Stats.price;
             this.Level = 1;
+            this.BuyBtn = undefined;
         }
     }
 
     upgradeMine(){
-        if (this.Repo.Credit >= this.Stats.upgrade && this.Repo.Technologies[this.UpgradeNumbers[this.Stats.type+3]]) {
+        if (this.Repo.Credit >= this.Stats.upgrade && this.Repo.Technologies[this.UpgradeNumbers[this.Stats.type]]) {
             this.Repo.Credit -= this.Stats.upgrade;
             this.Level = 2;
+            this.UpgradeBtn = undefined;
             this.Stats.material *= 1.5;
             this.Stats.tech *= 1.5;
             this.TimerStop = Math.round(60/this.Stats.speed*1.5*60*2);
