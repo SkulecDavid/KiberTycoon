@@ -10,6 +10,7 @@ export class TerraBuild extends Building {
         super(repo, position, ()=>this.actions());
         this.Color = '#5a9e4e';
         this.Type = type;
+        this.Image = this.Repo.Images[8+this.Type]
         this.MaxLevel = this.Type == 3 ? 0 : 1;
         this.UpgradePrice = 30*(this.Type+1);
         this.TerraPoint = 30+(this.Type*40);

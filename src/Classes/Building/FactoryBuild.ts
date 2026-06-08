@@ -13,6 +13,7 @@ export class FactoryBuild extends Building {
         super(repo, position, ()=>this.actions());
         this.Color = '#b93f3f';
         this.Type = type;
+        this.Image = this.Repo.Images[4+this.Type];
         this.MaxLevel = this.Type == 3 ? 0 : 1;
         this.UpgradePrice = this.UpgradePrices[this.Type];
         this.TimerStop = Math.round(60/this.Timers[this.Type]*60*2);

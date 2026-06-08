@@ -82,7 +82,7 @@ export class Area {
 
         if (this.Status == 'locked') {
             ctx.fillStyle = this.Color;
-            ctx.globalAlpha = 0.4;
+            ctx.globalAlpha = 0.5;
             ctx.fillRect(this.X, this.Y, this.Size, this.Size);
             ctx.globalAlpha = 1;
             ctx.strokeRect(this.X, this.Y, this.Size, this.Size);

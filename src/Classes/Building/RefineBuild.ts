@@ -12,6 +12,7 @@ export class RefineBuild extends Building {
         this.Color = '#d76b3c';
         this.MaxLevel = 1;
         this.Type = type;
+        this.Image = this.Repo.Images[this.Type];
         this.UpgradePrice = this.Repo.Mines[this.Type*2].Stats.price/2;
         this.TimerStop = this.Repo.Mines[this.Type].TimerStop;
 

@@ -11,6 +11,7 @@ export class StorageBuild extends Building {
     constructor(repo: Game, position: [number, number]){
         super(repo, position, ()=>this.actions());
         this.Color = '#d69f3d';
+        this.Image = this.Repo.Images[15];
         this.UpgradePrice = 50;
         this.MaxLevel = 3;
 

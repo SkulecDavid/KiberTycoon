@@ -18,6 +18,9 @@ export class Game{
     public CanvasHeight: number;
     public Ctx: CanvasRenderingContext2D;
 
+    public Images: HTMLImageElement[];
+        // 0-3-refinery 4-7-factory 8-11-terraform 12-14-Resources 15-storage
+
     public LightColor: HEXColor = '#e3c09d';
     public DarkColor: HEXColor = '#451804';
     public MainBtnColor: HEXColor = '#dd6345';
@@ -67,10 +70,10 @@ export class Game{
     public BuildAreas: Area[][];
     public Technologies: boolean[] = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
 
-    public Credit: number = 200; // DEFAULT 200
-    public Material: number = 50; // DEFAULT 50
-    public TechPoint: number = 0; // DEFAULT 0
-    public TerraPoint: number = 0; // DEFAULT 0
+    public Credit: number = 200000; // DEFAULT 200
+    public Material: number = 500000; // DEFAULT 50
+    public TechPoint: number = 999999; // DEFAULT 0
+    public TerraPoint: number = 9999; // DEFAULT 0
     public TerraLvl: Terra = 0;
 
     public FullCap: number = 0;
@@ -107,6 +110,27 @@ export class Game{
         this.CanvasWidth = this.Canvas.width;
         this.CanvasHeight = this.Canvas.height;
         this.Ctx = this.Canvas.getContext('2d')!;
+
+        this.Images = new Array();
+        for (let i = 0; i < 16; i++) {
+            switch (true) {
+                case i < 4:
+                    this.Images.push(document.getElementById(`ref${i+1}`) as HTMLImageElement);
+                    break
+                case i < 8:
+                    this.Images.push(document.getElementById(`fac${i+1-4}`) as HTMLImageElement);
+                    break
+                case i < 12:
+                    this.Images.push(document.getElementById(`ter${i+1-8}`) as HTMLImageElement);
+                    break
+                case i < 15:
+                    this.Images.push(document.getElementById(`res${i+1-12}`) as HTMLImageElement);
+                    break
+                default:
+                    this.Images.push(document.getElementById('store') as HTMLImageElement);
+                    break
+            }
+        }
 
         this.QuarterWidth = this.CanvasWidth/4;
         this.OneSixthHeight = this.CanvasHeight/6;
@@ -214,8 +238,8 @@ export class Game{
             this.TechBtn.draw();
             this.StatBtn.draw();
 
-            for (let row = 0; row < 4; row++) {
-                for (let col = 0; col < 5; col++) {
+            for (let row = 3; row >= 0; row--) {
+                for (let col = 4; col >= 0; col--) {
                     this.BuildAreas[row][col].draw();
                 }
             }

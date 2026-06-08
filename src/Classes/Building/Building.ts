@@ -6,6 +6,7 @@ export class Building{
     protected Repo: Game;
     protected Position: [row: number, col: number];
     protected Color: HEXColor = '#fff';
+    protected Image: HTMLImageElement;
     protected Size: number;
     protected Event: Function
     protected X: number;
@@ -18,6 +19,7 @@ export class Building{
 
     constructor(repo: Game, position: [number, number], event: Function) {
         this.Repo = repo;
+        this.Image = this.Repo.Images[0]
         this.Position = position;
         this.Size = this.Repo.BuildingSize;
         this.Event = event;
@@ -45,13 +47,16 @@ export class Building{
     }
 
     draw(){
+        const ctx = this.Repo.Ctx;
+        /*ctx.fillStyle = this.Color;
+        ctx.fillRect(this.X, this.Y, this.Size, this.Size);*/        
+
+        ctx.drawImage(this.Image, this.X-this.Size/3.5, this.Y-this.Size/3.5);
+
         if (this.Buttons){
             this.Buttons.forEach(btn => {
                 btn.draw();
             });
         }
-        const ctx = this.Repo.Ctx;
-        ctx.fillStyle = this.Color;
-        ctx.fillRect(this.X, this.Y, this.Size, this.Size);
     }
 }

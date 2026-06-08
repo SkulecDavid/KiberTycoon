@@ -8,6 +8,7 @@ export class UI{
     private TerraHeight: number;
     private Resources: string[] = ['Kreditek:', 'Alapanyagok:', 'Techpontok:', 'Terraformálás:'];
     private Levels: number[];
+    private Images: HTMLImageElement[];
     private Terra0: HEXColor = '#6b2d2d';
     private Terra1: HEXColor = '#b93f3f';
     private Terra2: HEXColor = '#d76b3c';
@@ -20,6 +21,10 @@ export class UI{
         this.ResourceHeight = this.Repo.OneTwelfthHeight;
         this.TerraHeight = this.Repo.OneSixthHeight;
         this.Levels = [this.Repo.Credit, this.Repo.Material, this.Repo.TechPoint, this.Repo.TerraLvl];
+        this.Images = new Array();
+        for (let i = 0; i < 3; i++) {
+            this.Images.push(this.Repo.Images[12+i])
+        }
     }
     
     update(){
@@ -39,6 +44,8 @@ export class UI{
 
             ctx.fillStyle = this.Repo.DarkColor;
             ctx.fillText(`${this.Resources[i]} ${this.Levels[i].toLocaleString('hu-HU')}`, 0+i*this.Width + this.Width/12, 0 + this.ResourceHeight/2+(this.Repo.FontSize/3));
+            
+            ctx.drawImage(this.Images[i], (i+1)*this.Repo.QuarterWidth-60, 0, 60, 60)
         }
         
         ctx.fillStyle = this.Repo.LightColor;
