@@ -70,10 +70,10 @@ export class Game{
     public BuildAreas: Area[][];
     public Technologies: boolean[] = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
 
-    public Credit: number = 200000; // DEFAULT 200
-    public Material: number = 500000; // DEFAULT 50
-    public TechPoint: number = 999999; // DEFAULT 0
-    public TerraPoint: number = 9999; // DEFAULT 0
+    public Credit: number = 200; // DEFAULT 200
+    public Material: number = 50; // DEFAULT 50
+    public TechPoint: number = 0; // DEFAULT 0
+    public TerraPoint: number = 0; // DEFAULT 0
     public TerraLvl: Terra = 0;
 
     public FullCap: number = 0;
