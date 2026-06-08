@@ -4,7 +4,7 @@ import type { Game } from "../Game";
 export class Market {
     private Repo: Game;
     private Buttons: Button[];
-    private Prices: number[] = [2, 4, 6, 8, 8, 16, 24, 52];
+    private Prices: number[] = [8, 16, 24, 32, 32, 64, 96, 208];
     private X: number;
     private Y: number;
 

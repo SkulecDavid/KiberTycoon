@@ -73,7 +73,7 @@ export class Menu{
 
                 case 'market':
                     const items = ['Szén', 'Réz', 'Vas', 'Arany', 'Kábel', 'Acél', 'Chip', 'Elektronika'];
-                    const prices = [2, 4, 6, 8, 8, 16, 24, 52];
+                    const prices = [8, 16, 24, 32, 32, 64, 96, 208];
                     for (let i = 0; i < 4; i++) {
                         const x = this.Repo.QuarterWidth*i+this.Repo.SmallDivX;
                         const y = this.Repo.SmallDivY;
