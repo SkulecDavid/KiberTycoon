@@ -203,7 +203,7 @@ export class Area {
     }
 
     newTerra(type: number){
-        if (this.Repo.Technologies[this.UnlockNumbers[type+7-1]] &&
+        if (this.Repo.Technologies[this.UnlockNumbers[type+8-1]] &&
             confirm(`Akarsz egy ${this.TerraNames[type]} építeni (${this.BuildingPrices[9+type]} alapanyag)?`)) {
             if (this.Repo.Material >= this.BuildingPrices[9+type]) {
                 this.Status = 'used';
