@@ -198,7 +198,7 @@ export class Game{
         this.MarketMenu = new Market(this)
         this.Techs = new Array();
         for (let i = 0; i < this.Technologies.length; i++) {
-            this.Techs.push(new Tech(this, {number: i, materials: 100+(i*50), techPoints: 100+(i*75), terraPoints: (i % 5 == 4 && i > 0) || i == this.Technologies.length-1 ? 100*((i+1)/5) : undefined}));
+            this.Techs.push(new Tech(this, {number: i, materials: 100+(i*50), techPoints: 100+(i*25), terraPoints: (i % 5 == 4 && i > 0) || i == this.Technologies.length-1 ? 100*((i+1)/5) : undefined}));
         }
         this.Stats = new Stat(this);
 
